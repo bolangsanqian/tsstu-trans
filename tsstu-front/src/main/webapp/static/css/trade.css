@@ -1,0 +1,310 @@
+body {
+	background-color: #fff !important;
+}
+.tsstu-header {
+	margin-top: 88px;
+	width: 100%;
+	height: 120px;
+}
+
+.tsstu-header ul {
+	width: 100%;
+	height: 120px;
+}
+
+.tsstu-header ul li {
+	height: 120px;
+	float: left;
+	width: 20%;
+}
+
+.tsstu-header ul li  {
+	font-size: 26px;
+}
+.tsstu-header li.real-time {
+    font-size: 48px !important;
+    text-align: center;
+    height: 120px;
+    line-height: 120px;
+    font-weight: 800;
+    color: #1fc65b !important;
+    width: 40% !important;
+    text-align: center;
+}
+.tsstu-header .real-time p {
+	height: 120px;
+	line-height: 120px; 
+}
+.tsstu-header .real-time p .arrow-img {
+	height: 17px;
+	width: 16px;
+	margin-bottom: 10px;
+}
+.tsstu-header .open p,
+.tsstu-header .high p,
+.tsstu-header .low p {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.tsstu-header .price {
+	color: #fa2e42;
+}
+.tsstu-header>ul.up .price {
+	color: #fa2e42;
+}
+.tsstu-header>ul.down .price {
+	color: #1fc65b;
+}
+
+.tsstu-header>ul.down .price {
+	color: #1fc65b;
+}
+
+.tsstu-header .title {
+	padding-top: 20px;
+	color: black;
+}
+
+
+/************************/
+.tsstu-nav,
+.tsstu-nav ul {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+.tsstu-nav li {
+	width: 12%;
+	float: left;
+	height: 44px;
+	line-height: 44px;
+	font-size: 26px;
+}
+
+.tsstu-nav li.switch {
+	width: 26%;
+    height: 52px;
+    line-height: 52px;
+    border-radius: 0.1rem;
+    font-weight: bold;
+}
+.tsstu-nav li.switch span {
+	width: 45%;
+	height: 44px;
+    line-height: 44px;
+    text-align: center;
+    display: block;
+    float: left;
+    margin-left: 2px;
+}
+
+.tsstu-nav li.switch span.active {
+	color: #4285f4;
+	border-bottom: 2px solid #4285f4;
+}
+
+.tsstu-nav li.switch span.k {
+}
+
+.tsstu-nav li.active {
+    color: #fdbe19;
+    border-bottom: 2px solid #fdbe19;
+}
+
+
+/*******************************/
+.tsstu-button {
+	width: 100%;
+	height: 100px;
+	position: fixed;
+	bottom: 0px;
+	vertical-align: bottom;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #CCC;
+}
+
+.tsstu-button ul {
+	width: 100%;
+	height: 100px;
+}
+
+.tsstu-button ul li {
+	height: 100px;
+	float: left;
+	text-align: center;
+	color: #fff;
+	font-size: 28px;
+}
+
+.tsstu-button ul li img {
+	margin-top: 15px;
+	width: 40px;
+	height: 40px;
+}
+.tsstu-button ul li .text {
+	margin-top: 5px;
+}
+.tsstu-button ul li div {
+	height: 50%;
+}
+
+.tsstu-button ul li.hold {
+	width: 30%;
+	/* background-color: #bcd1e6; */
+/* 	color: #666 !important; */
+	background-color: #bcd1e6;
+}
+
+.tsstu-button ul li.buy-up {
+	width: 35%;
+	/* background-color: #d83f4e; */
+	background-color: #fa5558;
+}
+
+.tsstu-button ul li.buy-down {
+	width: 35%;
+	background-color: #1fc65b; /* #5794ff */
+}
+
+/**************************持仓列表**********************************/
+#hold_list_dialog .body {
+	height: 450px;
+	padding-bottom: 30px;
+}
+#hold_list_dialog .tsstu-list {
+	padding-top: 0px;
+}
+#hold_list_dialog {
+	bottom: 100px !important;
+}
+#hold_list_dialog_mask {
+	bottom: 100px !important;
+}
+
+/*************************** 交易中 *******************************/
+.tsstu-dialog2 {
+	display: none;
+	position:absolute; 
+	width:94%; 
+	top:50%; 
+	left:50%; 
+	margin-left:-47%; 
+	margin-top:-350px; 
+	z-index:1000; 
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    overflow: hidden;
+}
+.tsstu-dialog2 .header {
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	background-color: #f85255;
+	text-align: center;
+	color: #fff;
+}
+.tsstu-dialog2 .header {
+	width: 100%;
+}
+.tsstu-dialog2 .header .title {
+	font-size: 36px;
+}
+.tsstu-dialog2 .close {
+	right: 0px; 
+	position: absolute;
+	height: 80px;
+	line-height:65px;
+	width: 60px;
+	vertical-align: middle;
+}
+/**汇总**/
+.tsstu-dialog2 .sum {
+	height: 120px;
+	display: block;
+	background-color: #fff;
+	
+}
+.tsstu-dialog2 ul {
+	height: 40px;
+}
+.tsstu-dialog2 .sum .title {
+	padding-top: 20px;
+	font-size: 25px;
+}
+.tsstu-dialog2 .sum .text {
+	padding-top: 5px;
+	font-size: 25px;
+	color: #fa2e42;
+}
+.tsstu-dialog2 .sum li {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+.tsstu-dialog2 .time {
+	height: 300px;
+	background-color: #fff;
+	margin-bottom: 5px;
+	position: relative;
+}
+/* 按钮 */
+.tsstu-dialog2 .button {
+	padding-top: 10px;
+	height: 105px;
+	display: block;
+	background-color: #fff;
+}
+.tsstu-dialog2 .button a {
+    display: block;
+    width: 95%;
+    height: 80px;
+    font-size: 32px;
+    color: #fff;
+    background-color: #f85255;
+    text-align: center;
+    line-height: 80px;
+    border-radius: 10px;
+    margin: 0 auto;
+    
+}
+/**倒计时**/
+.tsstu-circle-wrap {
+	position: absolute;
+	display: inline-table;
+	top:50%;
+	left:50%;
+	margin-top:-140px;
+	margin-left:-140px;
+}
+.tsstu-circle-wrap .warp {
+	position: absolute;
+	width: 100%;
+	font-size: 15px;
+	height: 60px;
+	line-height: 60px;
+	text-align: center;
+	color: #fdbe19;
+}
+.tsstu-circle-wrap .miao {
+	font-size: 70px;
+	height: 30px;
+	line-height: 30px;
+	padding-top: 60px;
+}
+.tsstu-circle-wrap .price {
+	font-size: 30px;
+	line-height: 40px;
+	color: #fdbe19;
+	padding-top: 50px;
+}
+.tsstu-circle-wrap .text {
+	font-size: 26px;
+	color: rgb(94, 95, 96);
+}
+.tsstu-circle-wrap .current-price {
+	color: #fa5558;
+}

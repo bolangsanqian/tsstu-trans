@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 短信记录(sys_sms_record) -->
+<mapper namespace="com.tsstu.console.dao.SmsRecordMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.SmsRecord">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="sms_type" property="sms_type" jdbcType="INTEGER" />
+		<result column="sms_content" property="sms_content" jdbcType="VARCHAR" />
+		<result column="send_time" property="send_time" jdbcType="TIMESTAMP" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			mobile,
+			sms_type,
+			sms_content,
+			send_time,
+			ip,
+			remark
+		from 
+			sys_sms_record
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+					or ip like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile}
+			</if>
+			<if test="sms_type != null and sms_type != ''">
+				and sms_type = #{sms_type}
+			</if>
+			<if test="send_time_begin != null and send_time_begin != ''">
+				and send_time &gt;= #{send_time_begin}
+			</if>
+			<if test="send_time_end != null and send_time_end != ''">
+				and send_time &lt;= #{send_time_end}
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip = #{ip}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			mobile,
+			sms_type,
+			sms_content,
+			send_time,
+			ip,
+			remark
+		from  
+			sys_sms_record 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_sms_record
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="mobile != null">mobile,</if>
+			<if test="sms_type != null">sms_type,</if>
+			<if test="sms_content != null">sms_content,</if>
+			<if test="send_time != null">send_time,</if>
+			<if test="ip != null">ip,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="mobile != null">#{mobile, jdbcType=VARCHAR},</if>
+			<if test="sms_type != null">#{sms_type, jdbcType=INTEGER},</if>
+			<if test="sms_content != null">#{sms_content, jdbcType=VARCHAR},</if>
+			<if test="send_time != null">#{send_time, jdbcType=TIMESTAMP},</if>
+			<if test="ip != null">#{ip, jdbcType=VARCHAR},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_sms_record
+		set 
+		<trim suffixOverrides="," >
+			<if test="mobile != null">mobile=#{mobile, jdbcType=VARCHAR},</if>
+			<if test="sms_type != null">sms_type=#{sms_type, jdbcType=INTEGER},</if>
+			<if test="sms_content != null">sms_content=#{sms_content, jdbcType=VARCHAR},</if>
+			<if test="send_time != null">send_time=#{send_time, jdbcType=TIMESTAMP},</if>
+			<if test="ip != null">ip=#{ip, jdbcType=VARCHAR},</if>
+			<if test="remark != null">remark=#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_sms_record
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_sms_record
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_sms_record
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="sms_content != null and sms_content != ''">and sms_content=#{sms_content, jdbcType=VARCHAR}</if>
+			<if test="ip != null and ip != ''">and ip=#{ip, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

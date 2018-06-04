@@ -1,0 +1,405 @@
+@charset "UTF-8"; 
+
+body {
+	overflow: hidden
+}
+
+.msg-container {
+	position: fixed;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0 30px;
+	top: 135px;
+	text-align: center;
+	z-index: 1
+}
+
+.msg-container .msg {
+	text-align: left;
+	padding: 15px
+}
+
+#show_area {
+	cursor: pointer;
+	position: absolute;
+	top: 1px;
+	right: 9px;
+	width: 50px;
+	height: 39px;
+	line-height: 39px;
+	font-size: 24px;
+	font-family: "宋体";
+	font-weight: 700;
+	text-align: center
+}
+
+.header-static {
+	background-color: #4285f4
+}
+
+#page_login {
+	padding-top: 20px;
+	background: #f8f8f8
+}
+
+#page_login a {
+	color: #4285f4;
+	font-size: 13px;
+}
+
+#page_login .input-wrapper {
+	border-width: 1px 0;
+	border-style: solid;
+	border-color: #d3d3d3;
+	padding-left: 18px;
+	margin-bottom: 30px;
+	background: #fff
+}
+
+#page_login .input-wrapper li {
+	padding: 5px 30px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #d3d3d3;
+	background: url(../images/login-input-icon_de79d40.png?v=3) no-repeat 0
+		-99999px/25px auto;
+	overflow: hidden
+}
+
+#page_login .input-wrapper li:last-child {
+	border-bottom: 0 none
+}
+
+#page_login .input-wrapper li.i-username {
+	background-position: 0 14px
+}
+
+#page_login .input-wrapper li.i-password {
+	background-position: 0 -29px
+}
+
+#page_login .input-wrapper li.i-vcode {
+	background-position: 0 -112px
+}
+
+#page_login .input-wrapper li.i-invite-code {
+	background-position: 0 -71px
+}
+
+#page_login .input-wrapper li.i-vcode-sms {
+	background-position: 0 -155px
+}
+
+#page_login .input-wrapper li input {
+	padding: 0;
+	border: 0 none;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	outline: 0 none;
+	font-size: 14px;
+    font-family: "微软雅黑";
+}
+
+#page_login .input-wrapper .i-vcode,
+#page_login .input-wrapper .i-vcode-sms {
+	position: relative;
+	padding-right: 10px
+}
+
+#page_login .input-wrapper .i-vcode #captcha,
+#page_login .input-wrapper .i-vcode-sms #sms_captcha {
+	width: 50%;
+}
+
+#page_login .input-wrapper .i-vcode #code_img {
+	width: 110px;
+	height: 44px;
+	float: right;
+	top: 3px;
+	border-radius: 4px;
+}
+
+#page_login .input-wrapper .i-vcode-sms .sms_button {
+  float: right;
+  color: #666;
+  font-size: 13px;
+  background-color: #8fdbff;
+  border-radius: 4px;
+  max-width: 110px;
+  min-width: 110px;
+  text-align: center;
+}
+
+#page_login .btn-login {
+	width: 100%;
+	padding: 0;
+	border: 0 none;
+	color: #fff;
+	height: 45px;
+	border-radius: 6px;
+	background: #4285f4
+}
+
+#page_login .auto-login {
+	color: #4285f4;
+	font-size: 13px;
+}
+
+#page_login .auto-login input[name=rmflag] {
+	display: none
+}
+
+#page_login .auto-login input[name=rmflag] ~.rmflag-ico {
+	display: inline-block;
+	vertical-align: middle;
+	margin: -2px 4px 0 0;
+	width: 15px;
+	height: 15px;
+	background: #aaa;
+	border-radius: 50%
+}
+
+#page_login .auto-login input[name=rmflag]:checked ~.rmflag-ico {
+	background:
+		url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUMxODA1RjFBNTc5MTFFNkE0NERBRTc5MTk0RDNENzYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUMxODA1RjJBNTc5MTFFNkE0NERBRTc5MTk0RDNENzYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQzE4MDVFRkE1NzkxMUU2QTQ0REFFNzkxOTREM0Q3NiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQzE4MDVGMEE1NzkxMUU2QTQ0REFFNzkxOTREM0Q3NiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhqR3uMAAAMqSURBVHjatJdrSBRRFMf/M7vubBlp4YMIKkRbiCIS7AH1oURFsCDt+TmCtNIoKvpSZgZ9CDLxQX3oQyBZH9aKpNooKogI7QFRKfagoIfP1tB0Zmd3O3e4C6vuvGw88Md177nnN7P3nHvPFTadHYEFSyIVkQpIeaQsUiofC5I+kzpID0j3SSGzgG6TcRb8EKmClK7jk8m1jlRJGiA1kur4QyU00QC6i9RFOmUATWRpfE4Xj2EZ7CI1ka7xN5muZfIYTTymIZg53CCVwzkr5zFdRmC2LqVw3ljMi3rgnaQDmDnbzxkTwCx7652k5GW5cLrMizleIf7r+lgZxsCsZDKcgqbPFXBii4T1PhcKlk+o2AzO0sAeXqeOmJtS6ORWL1JmC3jxKYybnVP2EsbyMHChzTo1tL0bPVi2UETvcBTnbsuIJvhBGDMGdsQ2+NwoW50ENQycaRvHn7GonmsRA+c6AV2QKuBoiQcslS49UvDhR8TIPZeBl+qNCoI1qIfyp5oyOFkS8LRLhb/D9IzIYeCUhKcDJcflPbOwNttlXqAFErIzRXwfiuB8u2LlWVN0D4nilW5kZYio2eZF4Qr9QyyfyqVklRuyCtS0yRiVo5Z+JQYeTjTQ+jyElmchuMjj2GYJ29ckTfFZlCbicLGkfW4MyPjYG7GaEsMM3JNohD33lScKGgKK9s++fI+m2LJL9BzVpRK89DfwVkX7G9VOLvYw8EsjjzbaAGpvyVqJsLc+TjuSm2axN11Mb/x1IIK6e7LdInjFFi9AOmjk9fi9ihGqyeoySdsCcyiRlqSLGFPoO78MOWS7+gIiBw+aeXZ+CeNIyziCf6MalNmFuwq+DUTsQvtZX8YisPxvsDKj+2cEVVfH8Yu2wzuvVTx8p05nr2EdiSLwLpMdVd1WT6j5yQJGqGwU+9x+vmEFxbgWtdLq7KHRaUHBGcHJHch13pbOlLHYrXo9VxXJPwNQP4+t2+xRtWIHqdlBaDOPGTbrq8O8S9hN6vsPYB+PUTEZanaTYOvhI9VYqfM4G+RzfPFravfuFOTXkVp+aSuMu7TN4z6/4y5tAS7Ts/GfAAMA+krcjcug5l4AAAAASUVORK5CYII=");
+	background-size: 15px 15px
+}
+
+#page_login .sms-login {
+	margin-top: 40px
+}
+
+#page_register {
+	width: 100%
+}
+
+#v_code {
+	padding-right: 100px
+}
+
+#code_img {
+	cursor: pointer;
+	position: absolute;
+	display: block;
+	right: 10px;
+	top: 1px
+}
+
+#page_register .reg-form {
+	text-align: center
+}
+
+#page_register .form-control {
+	padding-bottom: 30px
+}
+
+#page_identity {
+	padding: 0 15px
+}
+
+#page_identity .reg-success {
+	line-height: 2.5;
+	margin-top: 10px;
+	text-align: center;
+	font-weight: 700
+}
+
+#page_identity p {
+	line-height: 2
+}
+
+#page_identity p strong {
+	white-space: nowrap
+}
+
+#btn_check {
+	display: none
+}
+
+#page_forgetpassword {
+	color: #666;
+	padding: 0 15px
+}
+
+#page_forgetpassword h2 {
+	padding: 0 15px;
+	margin: 0 -15px;
+	background: #f1f1f1;
+	color: #666;
+	font-weight: 400
+}
+
+#page_forgetpassword p {
+	line-height: 2;
+	margin: 8px auto
+}
+
+#page_result .msg-container {
+	top: 100px
+}
+
+#page_result .msg {
+	padding: 10px 60px
+}
+
+#page_result p {
+	margin-top: 130px;
+	text-align: center;
+	color: #cdcdcd
+}
+
+#page_select_area {
+	display: none
+}
+
+#page_select_area {
+	background: #fff
+}
+
+#page_select_area li {
+	border: 1px solid #ebebeb;
+	color: #999;
+	line-height: 3;
+	text-indent: 1em
+}
+
+.pl15 {
+	padding: 0 15px;
+	line-height: 1.8
+}
+
+.content p {
+	line-height: 1.8
+}
+
+.item-with-label input {
+	padding-left: 98px
+}
+
+.form-item, .form-control {
+	color: #333
+}
+
+#edit_phone, .blue_btn {
+	margin-top: 20px;
+	background-color: #3C82F6;
+	color: #fff
+}
+
+.tf-link {
+	display: inline-block;
+	background: #09f;
+	color: #fff;
+	line-height: 38px;
+	padding-left: 8px;
+	padding-right: 8px;
+	text-align: center;
+	border-radius: 5px
+}
+
+.msg-dec {
+	margin-left: 120px;
+	color: #999;
+	margin-top: 3px;
+	margin-bottom: 10px;
+	font-size: 12px
+}
+
+.pt-20 {
+	padding-top: 20px
+}
+
+.msg-tips {
+	font-size: 12px;
+	padding-top: 20px
+}
+
+.form-item a {
+	color: #2965b1
+}
+
+.other-login-ways {
+	margin-top: 30px;
+	text-align: center;
+	padding: 0 15px
+}
+
+.other-login-ways .tit {
+	color: #aaa;
+	height: 28px;
+	line-height: 28px;
+	overflow: hidden;
+	position: relative
+}
+
+.other-login-ways .tit:before {
+	content: "";
+	width: 100%;
+	height: 1px;
+	border-top: 1px solid #e0e0e0;
+	position: absolute;
+	top: 50%;
+	left: 0
+}
+
+.other-login-ways .tit span {
+	background: #f8f8f8;
+	padding: 0 8px;
+	position: relative
+}
+
+.other-login-ways .cont {
+	padding: 25px 0
+}
+
+.other-login-ways .cont a {
+	display: inline-block;
+	min-width: 60px;
+	padding-top: 65px;
+	font-size: 14px;
+	line-height: 20px;
+	white-space: nowrap;
+	background: url(../images/other-login-icon_34c772e.png) no-repeat 0
+		-99999px/60px auto;
+	color: #999 !important;
+	margin: 0 15px
+}
+
+.other-login-ways .cont a.way-weibo {
+	background-position: center 0
+}
+
+.other-login-ways .cont a.way-qq {
+	background-position: center -100px
+}
+
+.other-login-ways .cont a.way-weixin {
+	background-position: center -200px;
+	display: none
+}
+
+.other-login-notice {
+	padding: 20px
+}
+
+.other-login-notice p {
+	text-align: justify;
+	margin-bottom: 10px;
+	line-height: 24px
+}
+
+.other-login-notice p a {
+	color: #2965b1
+}
+
+.other-login-notice .goto-auth {
+	display: block;
+	color: #fff;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 4px;
+	text-align: center;
+	background: #3ca0ec
+}

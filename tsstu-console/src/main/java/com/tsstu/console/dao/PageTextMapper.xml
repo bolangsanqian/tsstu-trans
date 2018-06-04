@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 文案管理(sys_page_text) -->
+<mapper namespace="com.tsstu.console.dao.PageTextMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.PageText">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="trade_mode" property="trade_mode" jdbcType="INTEGER" />
+		<result column="text" property="text" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			code,
+			name,
+			trade_mode,
+			text,
+			sort
+		from 
+			sys_page_text
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or text like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="trade_mode != null and trade_mode != ''">
+				and trade_mode = #{trade_mode}
+			</if>
+			<if test="text != null and text != ''">
+				and text = #{text}
+			</if>
+			<if test="sort != null and sort != ''">
+				and sort = #{sort}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			code,
+			name,
+			trade_mode,
+			text,
+			sort
+		from  
+			sys_page_text 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_page_text
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="code != null">code,</if>
+			<if test="name != null">name,</if>
+			<if test="trade_mode != null">trade_mode,</if>
+			<if test="text != null">text,</if>
+			<if test="sort != null">sort,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="code != null">#{code, jdbcType=VARCHAR},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="trade_mode != null">#{trade_mode, jdbcType=INTEGER},</if>
+			<if test="text != null">#{text, jdbcType=VARCHAR},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_page_text
+		set 
+		<trim suffixOverrides="," >
+			<if test="code != null">code = #{code, jdbcType=VARCHAR},</if>
+			<if test="name != null">name = #{name, jdbcType=VARCHAR},</if>
+			<if test="trade_mode != null">trade_mode = #{trade_mode, jdbcType=INTEGER},</if>
+			<if test="text != null">text = #{text, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort = #{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_page_text
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_page_text
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_page_text
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="code != null and code != ''">and code=#{code, jdbcType=VARCHAR}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+			<if test="text != null and text != ''">and text=#{text, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 数据库表字段(columns) -->
+<mapper namespace="com.tsstu.console.dao.ColumnsMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Columns">
+		<result column="table_name" property="table_name" jdbcType="VARCHAR" />
+		<result column="column_name" property="column_name" jdbcType="VARCHAR" />
+		<result column="column_comment" property="column_comment" jdbcType="VARCHAR" />
+		<result column="data_type" property="data_type" jdbcType="VARCHAR" />
+		<result column="extra" property="extra" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			column_name,
+			column_comment,
+			data_type,
+			extra,
+			table_name
+		from 
+			information_schema.columns
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 column_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or column_comment like CONCAT(CONCAT('%', #{keywords }),'%')
+					or data_type like CONCAT(CONCAT('%', #{keywords }),'%')
+					or extra like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="column_name != null and column_name != ''">
+				and column_name = #{column_name}
+			</if>
+			<if test="column_comment != null and column_comment != ''">
+				and column_comment = #{column_comment}
+			</if>
+			<if test="data_type != null and data_type != ''">
+				and data_type = #{data_type}
+			</if>
+			<if test="extra != null and extra != ''">
+				and extra = #{extra}
+			</if>
+			<if test="table_name != null and table_name != ''">
+				and table_name = #{table_name}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			column_name,
+			column_comment,
+			data_type,
+			extra
+		from  
+			information_schema.columns 
+		where 
+			id = #{id} limit 1
+	</select>
+</mapper>

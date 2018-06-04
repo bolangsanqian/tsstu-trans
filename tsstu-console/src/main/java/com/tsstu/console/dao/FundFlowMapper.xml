@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 资金流水(wp_fund_flow) -->
+<mapper namespace="com.tsstu.console.dao.FundFlowMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.FundFlow">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="flow_no" property="flow_no" jdbcType="VARCHAR" />
+		<result column="trans_no" property="trans_no" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="NUMERIC" />
+		<result column="change_type" property="change_type" jdbcType="INTEGER" />
+		<result column="balance" property="balance" jdbcType="NUMERIC" />
+		<result column="frozen_money" property="frozen_money" jdbcType="NUMERIC" />
+		<result column="trans_time" property="trans_time" jdbcType="TIMESTAMP" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		<result column="trans_timestamp" property="trans_timestamp" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			f.id,
+			f.customer_id,
+			f.flow_no,
+			f.trans_no,
+			f.amount,
+			f.change_type,
+			f.balance,
+			f.frozen_money,
+			f.trans_time,
+			f.member_id,
+			f.operation_member_id,
+			f.agent_member_id,
+			f.trans_timestamp,
+			f.remark,
+			c.mobile,
+			c.nick_name
+		from 
+			wp_fund_flow f left join wp_customer c on f.customer_id = c.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 f.flow_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or f.trans_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or c.nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="flow_no != null and flow_no != ''">
+				and f.flow_no = #{flow_no}
+			</if>
+			<if test="trans_no != null and trans_no != ''">
+				and f.trans_no = #{trans_no}
+			</if>
+			<if test="change_type != null and change_type != ''">
+				and f.change_type = #{change_type}
+			</if>
+			<if test="trans_time_begin != null and trans_time_begin != ''">
+				and f.trans_time &gt;= #{trans_time_begin}
+			</if>
+			<if test="trans_time_end != null and trans_time_end != ''">
+				and f.trans_time &lt;= #{trans_time_end}
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and f.member_id = #{member_id}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and f.operation_member_id = #{operation_member_id}
+			</if>
+			<if test="agent_member_id != null and agent_member_id != ''">
+				and f.agent_member_id = #{agent_member_id}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and c.mobile = #{mobile}
+			</if>
+			<if test="h_number != null and h_number != ''">
+				and c.h_number like CONCAT(#{h_number }, '%') and c.h_level > #{h_level }
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by f.id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select
+			f.id,
+			f.customer_id,
+			f.flow_no,
+			f.trans_no,
+			f.amount,
+			f.change_type,
+			f.balance,
+			f.frozen_money,
+			f.trans_time,
+			f.member_id,
+			f.operation_member_id,
+			f.agent_member_id,
+			f.trans_timestamp,
+			f.remark,
+			c.mobile,
+			c.nick_name
+		from 
+			wp_fund_flow f left join wp_customer c on f.customer_id = c.id
+		where 
+			f.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_fund_flow
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">customer_id,</if>
+			<if test="flow_no != null">flow_no,</if>
+			<if test="trans_no != null">trans_no,</if>
+			<if test="amount != null">amount,</if>
+			<if test="change_type != null">change_type,</if>
+			<if test="balance != null">balance,</if>
+			<if test="frozen_money != null">frozen_money,</if>
+			<if test="trans_time != null">trans_time,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+			<if test="trans_timestamp != null">trans_timestamp,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="trans_no != null">#{trans_no, jdbcType=VARCHAR},</if>
+			<if test="amount != null">#{amount, jdbcType=NUMERIC},</if>
+			<if test="change_type != null">#{change_type, jdbcType=INTEGER},</if>
+			<if test="balance != null">#{balance, jdbcType=NUMERIC},</if>
+			<if test="frozen_money != null">#{frozen_money, jdbcType=NUMERIC},</if>
+			<if test="trans_time != null">#{trans_time, jdbcType=TIMESTAMP},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="trans_timestamp != null">#{trans_timestamp, jdbcType=INTEGER},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_fund_flow
+		set 
+		<trim suffixOverrides="," >
+			<if test="customer_id != null">customer_id=#{customer_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">flow_no=#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="trans_no != null">trans_no=#{trans_no, jdbcType=VARCHAR},</if>
+			<if test="amount != null">amount=#{amount, jdbcType=NUMERIC},</if>
+			<if test="change_type != null">change_type=#{change_type, jdbcType=INTEGER},</if>
+			<if test="balance != null">balance=#{balance, jdbcType=NUMERIC},</if>
+			<if test="frozen_money != null">frozen_money=#{frozen_money, jdbcType=NUMERIC},</if>
+			<if test="trans_time != null">trans_time=#{trans_time, jdbcType=TIMESTAMP},</if>
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">operation_member_id=#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">agent_member_id=#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="trans_timestamp != null">trans_timestamp=#{trans_timestamp, jdbcType=INTEGER},</if>
+			<if test="remark != null">remark=#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_fund_flow
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_fund_flow
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_fund_flow
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="flow_no != null and flow_no != ''">and flow_no=#{flow_no, jdbcType=VARCHAR}</if>
+			<if test="trans_no != null and trans_no != ''">and trans_no=#{trans_no, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

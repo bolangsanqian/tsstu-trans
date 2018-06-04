@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- ${title}(${table_name}) -->
+<mapper namespace="com.tsstu.console.dao.${objectName}Mapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.${objectName}">
+<#list fieldList as field>
+	<#if field.is_key == 1>
+		<id column="${field.name}" property="${field.name}" jdbcType="INTEGER" />
+	<#else>
+		<result column="${field.name}" property="${field.name}" jdbcType="${field.data_type}" />
+	</#if>
+</#list>
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+	<#list fieldList as field>
+		<#if field_has_next>
+			${field.name},
+		<#else>
+			${field.name}
+		</#if>
+	</#list>
+		from 
+			${table_name}
+		<trim prefix="where" prefixOverrides="and|or">
+		<#if (stringFieldCount > 0)>
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+			<#assign index=0>
+			<#list fieldList as field>
+				<#if field.data_type == "VARCHAR" && field.is_search = 1>
+					<#if (index > 0) >or</#if> ${field.name} like CONCAT(CONCAT('%', ${r"#"}{keywords }),'%')
+					<#assign index = index + 1>
+				</#if>
+			</#list>
+				)
+			</if>
+		</#if>
+<#list fieldList as field>
+	<#if field.is_search == 1>
+		<#if field.data_type == "TIMESTAMP">
+			<if test="${field.name}_begin != null and ${field.name}_begin != ''">
+				and ${field.name} &gt;= ${r"#"}{${field.name}_begin}
+			</if>
+			<if test="${field.name}_end != null and ${field.name}_end != ''">
+				and ${field.name} &lt;= ${r"#"}{${field.name}_end}
+			</if>
+		<#else>
+			<if test="${field.name} != null and ${field.name} != ''">
+				and ${field.name} = ${r"#"}{${field.name}}
+			</if>
+		</#if>
+	</#if>
+</#list>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${r"#"}{orderBy } ${r"#"}{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+	<#list fieldList as field>
+		<#if field_has_next>
+			${field.name},
+		<#else>
+			${field.name}
+		</#if>
+	</#list>
+		from  
+			${table_name} 
+		where 
+			id = ${r"#"}{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into ${table_name}
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	<#list fieldList as field>
+		<#if field.is_key == 0>
+			<if test="${field.name} != null">${field.name},</if>
+		</#if>
+	</#list>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	<#list fieldList as field>
+		<#if field.is_key == 0>
+			<if test="${field.name} != null">${r"#"}{${field.name}, jdbcType=${field.data_type}},</if>
+		</#if>
+	</#list>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			${table_name}
+		set 
+		<trim suffixOverrides="," >
+	<#list fieldList as field>
+		<#if field.is_key == 0 && field.name != "create_time" && field.name != "create_by">
+			<if test="${field.name} != null">${field.name} = ${r"#"}{${field.name}, jdbcType=${field.data_type}},</if>
+		</#if>
+	</#list>
+	    </trim>
+		where 
+			id = ${r"#"}{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			${table_name}
+		where id=${r"#"}{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			${table_name}
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            ${r"#"}{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from ${table_name}
+		<trim prefix="where" prefixOverrides="and|or">
+<#list fieldList as field>
+	<#if field.data_type == "VARCHAR" || field.name == "id">
+		<#if field.name == "id">
+			<if test="id != null">and id&lt;&gt;${r"#"}{id, jdbcType=INTEGER}</if>
+		<#else>
+			<if test="${field.name} != null and ${field.name} != ''">and ${field.name}=${r"#"}{${field.name}, jdbcType=${field.data_type}}</if>
+		</#if>
+	</#if>
+</#list>
+		</trim>
+	</select>
+</mapper>

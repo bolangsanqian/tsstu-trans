@@ -1,0 +1,111 @@
+<div class="pagin">
+	<input type="hidden" id="__pageRow" name="pageRow" value="${pageInfo.totalRow?c}" />
+	<input type="hidden" id="__totalPage" name="totalPage" value="${pageInfo.totalPage?c}" />
+	<input type="hidden" id="__pageSize" name="pageSize" value="${pageInfo.pageSize?c}" />
+	<input type="hidden" id="__pageNum" name="pageNum" value="${pageInfo.pageNum?c}" />
+	<input type="hidden" id="__orderBy" name="orderBy" value="${pageInfo.orderBy}" />
+	<input type="hidden" id="__sort_direction" name="sort_direction" value="${pageInfo.sort_direction}" />
+	<div class="message" style="float: left;">共<i class="blue">&nbsp;${pageInfo.totalRow?c}</i>&nbsp;条记录<#if (pageInfo.totalPage > 0)>，当前显示第&nbsp;<i class="blue">${pageInfo.pageNum?c}&nbsp;</i>页</#if></div>
+    <ul class="paginList" style="float: right;">
+        <li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
+        <li class="paginItem"><a href="javascript:;firstPage()">首页</a></li>
+        <li class="paginItem"><a href="javascript:prePage();">上页</a></li>
+        <#if (pageInfo.totalPage > 0)>
+	        <#list first..last as index >
+				<#if pageInfo.pageNum == index>
+					<li class="paginItem current"><a href="javascript:;">${pageInfo.pageNum?c }</a></li>
+				<#else>
+					<li class="paginItem"><a href="javascript:gotoPage(${index?c});">${index?c}</a></li>
+				</#if>
+			</#list>
+		</#if>
+        <li class="paginItem"><a href="javascript:nextPage();">下页</a></li>
+        <li class="paginItem"><a href="javascript:lastPage();">尾页</a></li>
+		<li class="paginItem"><a href="javascript:;">共${pageInfo.totalPage?c}页</a></li>
+        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+    </ul>
+</div>
+<script type="text/javascript">
+
+$(function($){
+
+	//复选框全选/反选控制
+	$("#${formName} #chk_all").on("click", function() {
+		$("#${formName} :checkbox[name=chk]").prop("checked", $(this).is(":checked"));
+		if ($(this).is(":checked")) {
+			$(this).closest("table").find('tbody > tr').addClass("active");
+		} else {
+			$(this).closest("table").find('tbody > tr').removeClass("active");
+		}
+	});
+	$("#${formName} :checkbox[name=chk]").on("click", function() {
+		var active_class = $(this).is(":checked") ? "active" : "";
+		$(this).closest("tr").toggleClass(active_class);
+		$("#${formName} #chk_all").prop("checked", ($("#${formName} :checkbox[name=chk]").not(":checked").length > 0 ? false : true));
+	});
+	
+	//初始化表头最新宽度
+	$("#${formName} .tablelist th").each(function() {
+		var w = $(">label", this).width();
+		$(this).css("min-width", w);
+	});
+
+	$("#${formName} .tablelist th.orderBy").click(function() {
+		var attr_name = $(this).attr("attr-name");
+		if (attr_name != "") {
+			var sort_direction = "${pageInfo.sort_direction }";
+			if (sort_direction == "" || sort_direction == "default" || sort_direction == "desc") {
+				sort_direction = "asc";
+			} else {
+				sort_direction = "desc";
+			}
+			$("#${formName} #__sort_direction").val(sort_direction);
+			$("#${formName} #__orderBy").val(attr_name);
+			search();
+		}
+	});
+	
+});
+
+function gotoPage(pageNum) {
+	//纠正页码
+	if (pageNum < 1) {
+		pageNum = 1;
+	}
+	var totalPage = ${pageInfo.totalPage?c };
+	if (pageNum > totalPage) {
+		pageNum = totalPage;
+	}
+
+	//指定查询页码
+	$("#__pageNum").val(pageNum);
+	
+	//查询*/
+	search();
+}
+
+//首页
+function firstPage() {
+	gotoPage(1);
+}
+
+//上一页
+function prePage() {
+	gotoPage(${pageInfo.pageNum?c } - 1);
+}
+
+//下一页
+function nextPage() {
+	gotoPage(${pageInfo.pageNum?c } + 1);
+}
+
+//尾页
+function lastPage() {
+	gotoPage(${pageInfo.totalPage?c });
+}
+
+function search() {
+	//提交表单
+	$("#${formName}").submit();
+}
+</script>

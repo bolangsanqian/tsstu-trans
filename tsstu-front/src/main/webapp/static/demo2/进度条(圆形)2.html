@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name ="viewport" content ="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>Document</title>
+	<style>
+	body{
+    	background: #fff;
+    }
+	.tsstu-circle-wrap,.tsstu-circle,.percent{
+		position: absolute;
+		width: 140px;
+		height: 140px;
+		border-radius: 50%;
+	}
+	.tsstu-circle-wrap{
+		top:50%;
+		left:50%;
+		margin-top:-100px;
+		margin-left:-100px;
+		background-color: #fdbe19;
+	}
+	.tsstu-circle{
+		box-sizing: border-box;
+		border:5px solid #fdbe19;
+		clip:rect(0,200px,200px,100px);
+	}
+	.clip-auto{
+		clip:rect(auto, auto, auto, auto);
+	}
+	.percent{
+		box-sizing: border-box;
+		top:-5px;
+		left:-5px;
+	}
+	.left{
+		transition:transform ease;
+		border:5px solid #ccc;
+		clip: rect(0,100px,200px,0);
+	}
+	.right{
+		border:5px solid #ccc;
+		clip: rect(0,200px,200px,100px);
+	}
+	.wth0{
+		width:0;
+	}
+	.num{
+		position: absolute;
+		box-sizing: border-box;
+		width: 130px;
+		height: 130px;
+		line-height: 60px;
+		text-align: center;
+		font-size: 35px;
+		left: 5px;
+		top: 5px;
+		border-radius: 50%;
+		background-color: #fff;
+		z-index: 1;
+		color: #fdbe19;
+	}
+	
+	.price {
+		font-size: 15px;
+		line-height: 5px;
+		color: #fdbe19;
+	}
+	.text {
+	font-size: 13px;
+		color: rgb(94, 95, 96);
+	}
+	.current-price {
+		color: #fa5558;
+	}
+	</style>
+	<script src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+</head>
+<body>
+<div class="tsstu-circle-wrap">
+	<div class="tsstu-circle">
+		<div class="percent left"></div>
+		<div class="percent right wth0"></div>
+	</div>
+	<div class="num">
+		<div class="miao">600</div>
+		<div class="price">
+			<p class="text">现价</p>
+			<p class="current-price">1000.992</p>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+	var ss = 600;
+	var percent = 600;
+	var loading = setInterval(function(){
+		if(percent < 0){
+			percent = 0;
+			$('.tsstu-circle-wrap').removeClass('clip-auto');
+			$('.tsstu-circle-wrap .right').addClass('wth0');
+		}else if(percent < ss / 2){
+			$('.tsstu-circle-wrap').addClass('clip-auto');
+			$('.tsstu-circle-wrap .right').removeClass('wth0');
+		}
+		$('.tsstu-circle-wrap .left').css("-webkit-transform","rotate("+(360/ss)*(ss - percent)+"deg)");
+		percent=percent - 1;
+		if(percent < 0) percent = 0;
+		$('.tsstu-circle-wrap .miao').text(percent);
+		if(percent < 0) clearInterval(loading);
+	},1000); 
+</script>
+</html>

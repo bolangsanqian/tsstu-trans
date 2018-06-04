@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 会员管理(wp_member) -->
+<mapper namespace="com.tsstu.console.dao.MemberMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Member">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="company_name" property="company_name" jdbcType="VARCHAR" />
+		<result column="company_leader" property="company_leader" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="identity_type" property="identity_type" jdbcType="INTEGER" />
+		<result column="identity" property="identity" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="NUMERIC" />
+		<result column="frozen_money" property="frozen_money" jdbcType="NUMERIC" />
+		<result column="deposit" property="deposit" jdbcType="NUMERIC" />
+		<result column="credit_money" property="credit_money" jdbcType="NUMERIC" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="wx_qrcode_url" property="wx_qrcode_url" jdbcType="VARCHAR" />
+		<result column="is_default" property="is_default" jdbcType="INTEGER" />
+		<result column="invite_code" property="invite_code" jdbcType="VARCHAR" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="exchange_member_id" property="exchange_member_id" jdbcType="INTEGER" />
+		<result column="customer_active_amount" property="customer_active_amount" jdbcType="NUMERIC" />
+		<result column="exchange_commission" property="exchange_commission" jdbcType="NUMERIC" />
+		<result column="operation_commission" property="operation_commission" jdbcType="NUMERIC" />
+		<result column="member_commission" property="member_commission" jdbcType="NUMERIC" />
+		<result column="direct_commission" property="direct_commission" jdbcType="NUMERIC" />
+		<result column="indirect_commission" property="indirect_commission" jdbcType="NUMERIC" />
+		<result column="direct_b_commission" property="direct_b_commission" jdbcType="NUMERIC" />
+		<result column="indirect_b_commission" property="indirect_b_commission" jdbcType="NUMERIC" />
+		<result column="member_type" property="member_type" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			name,
+			company_name,
+			company_leader,
+			mobile,
+			identity_type,
+			identity,
+			balance,
+			frozen_money,
+			deposit,
+			credit_money,
+			status,
+			create_time,
+			user_id,
+			wx_qrcode_url,
+			is_default,
+			invite_code,
+			operation_member_id,
+			exchange_member_id,
+			customer_active_amount,
+			exchange_commission,
+			operation_commission,
+			member_commission,
+			direct_commission,
+			indirect_commission,
+			direct_b_commission,
+			indirect_b_commission,
+			member_type
+		from 
+			wp_member
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or company_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or company_leader like CONCAT(CONCAT('%', #{keywords }),'%')
+					or mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+					or identity like CONCAT(CONCAT('%', #{keywords }),'%')
+					or invite_code like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="member_type != null and member_type != ''">
+				and member_type = #{member_type}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="company_name != null and company_name != ''">
+				and company_name = #{company_name}
+			</if>
+			<if test="company_leader != null and company_leader != ''">
+				and company_leader = #{company_leader}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile}
+			</if>
+			<if test="identity != null and identity != ''">
+				and identity = #{identity}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="is_default != null and is_default != ''">
+				and is_default = #{is_default}
+			</if>
+			<if test="invite_code != null and invite_code != ''">
+				and invite_code = #{invite_code}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and operation_member_id = #{operation_member_id}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			name,
+			company_name,
+			company_leader,
+			mobile,
+			identity_type,
+			identity,
+			balance,
+			frozen_money,
+			deposit,
+			credit_money,
+			status,
+			create_time,
+			user_id,
+			wx_qrcode_url,
+			is_default,
+			invite_code,
+			exchange_member_id,
+			operation_member_id,
+			customer_active_amount,
+			exchange_commission,
+			operation_commission,
+			member_commission,
+			direct_commission,
+			indirect_commission,
+			direct_b_commission,
+			indirect_b_commission,
+			member_type
+		from  
+			wp_member 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="member_type != null and member_type != ''">
+				and member_type = #{member_type}
+			</if>
+			<if test="user_id != null and user_id != ''">
+				and user_id = #{user_id}
+			</if>
+		</trim>
+		limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_member
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="name != null">name,</if>
+			<if test="company_name != null">company_name,</if>
+			<if test="company_leader != null">company_leader,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="identity_type != null">identity_type,</if>
+			<if test="identity != null">identity,</if>
+			<if test="balance != null">balance,</if>
+			<if test="frozen_money != null">frozen_money,</if>
+			<if test="deposit != null">deposit,</if>
+			<if test="credit_money != null">credit_money,</if>
+			<if test="status != null">status,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="user_id != null">user_id,</if>
+			<if test="wx_qrcode_url != null">wx_qrcode_url,</if>
+			<if test="is_default != null">is_default,</if>
+			<if test="invite_code != null">invite_code,</if>
+			<if test="exchange_member_id != null">exchange_member_id,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="customer_active_amount != null">customer_active_amount,</if>
+			<if test="exchange_commission != null">exchange_commission,</if>
+			<if test="operation_commission != null">operation_commission,</if>
+			<if test="member_commission != null">member_commission,</if>
+			<if test="direct_commission != null">direct_commission,</if>
+			<if test="indirect_commission != null">indirect_commission,</if>
+			<if test="direct_b_commission != null">direct_b_commission,</if>
+			<if test="indirect_b_commission != null">indirect_b_commission,</if>
+			<if test="member_type != null">member_type,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="company_name != null">#{company_name, jdbcType=VARCHAR},</if>
+			<if test="company_leader != null">#{company_leader, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">#{mobile, jdbcType=VARCHAR},</if>
+			<if test="identity_type != null">#{identity_type, jdbcType=INTEGER},</if>
+			<if test="identity != null">#{identity, jdbcType=VARCHAR},</if>
+			<if test="balance != null">#{balance, jdbcType=NUMERIC},</if>
+			<if test="frozen_money != null">#{frozen_money, jdbcType=NUMERIC},</if>
+			<if test="deposit != null">#{deposit, jdbcType=NUMERIC},</if>
+			<if test="credit_money != null">#{credit_money, jdbcType=NUMERIC},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+			<if test="user_id != null">#{user_id, jdbcType=INTEGER},</if>
+			<if test="wx_qrcode_url != null">#{wx_qrcode_url, jdbcType=VARCHAR},</if>
+			<if test="is_default != null">#{is_default, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">#{invite_code, jdbcType=VARCHAR},</if>
+			<if test="exchange_member_id != null">#{exchange_member_id, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="customer_active_amount != null">#{customer_active_amount, jdbcType=NUMERIC},</if>
+			<if test="exchange_commission != null">#{exchange_commission, jdbcType=NUMERIC},</if>
+			<if test="operation_commission != null">#{operation_commission, jdbcType=NUMERIC},</if>
+			<if test="member_commission != null">#{member_commission, jdbcType=NUMERIC},</if>
+			<if test="direct_commission != null">#{direct_commission, jdbcType=NUMERIC},</if>
+			<if test="indirect_commission != null">#{indirect_commission, jdbcType=NUMERIC},</if>
+			<if test="direct_b_commission != null">#{direct_b_commission, jdbcType=NUMERIC},</if>
+			<if test="indirect_b_commission != null">#{indirect_b_commission, jdbcType=NUMERIC},</if>
+			<if test="member_type != null">#{member_type, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_member
+		set 
+		<trim suffixOverrides="," >
+			<if test="name != null">name=#{name, jdbcType=VARCHAR},</if>
+			<if test="company_name != null">company_name=#{company_name, jdbcType=VARCHAR},</if>
+			<if test="company_leader != null">company_leader=#{company_leader, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">mobile=#{mobile, jdbcType=VARCHAR},</if>
+			<if test="identity_type != null">identity_type=#{identity_type, jdbcType=INTEGER},</if>
+			<if test="identity != null">identity=#{identity, jdbcType=VARCHAR},</if>
+			<if test="balance != null">balance=#{balance, jdbcType=NUMERIC},</if>
+			<if test="frozen_money != null">frozen_money=#{frozen_money, jdbcType=NUMERIC},</if>
+			<if test="deposit != null">balance=#{deposit, jdbcType=NUMERIC},</if>
+			<if test="credit_money != null">credit_money=#{credit_money, jdbcType=NUMERIC},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="user_id != null">user_id=#{user_id, jdbcType=INTEGER},</if>
+			<if test="wx_qrcode_url != null">wx_qrcode_url=#{wx_qrcode_url, jdbcType=VARCHAR},</if>
+			<if test="is_default != null">is_default=#{is_default, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">invite_code=#{invite_code, jdbcType=VARCHAR},</if>
+			<if test="exchange_member_id != null">exchange_member_id=#{exchange_member_id, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">operation_member_id=#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="customer_active_amount != null">customer_active_amount=#{customer_active_amount, jdbcType=NUMERIC},</if>
+			<if test="exchange_commission != null">exchange_commission=#{exchange_commission, jdbcType=NUMERIC},</if>
+			<if test="operation_commission != null">operation_commission=#{operation_commission, jdbcType=NUMERIC},</if>
+			<if test="member_commission != null">member_commission=#{member_commission, jdbcType=NUMERIC},</if>
+			<if test="direct_commission != null">direct_commission=#{direct_commission, jdbcType=NUMERIC},</if>
+			<if test="indirect_commission != null">indirect_commission=#{indirect_commission, jdbcType=NUMERIC},</if>
+			<if test="direct_b_commission != null">direct_b_commission=#{direct_b_commission, jdbcType=NUMERIC},</if>
+			<if test="indirect_b_commission != null">indirect_b_commission=#{indirect_b_commission, jdbcType=NUMERIC},</if>
+			<if test="member_type != null">member_type=#{member_type, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_member
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_member
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 调整会员余额 -->
+	<update id="changeBalance">
+		update
+			wp_member
+		set 
+			balance = balance + #{amount, jdbcType=NUMERIC }
+		where 
+			id = #{id} 
+			<if test="amount &lt; 0">
+				and balance &gt;= -#{amount, jdbcType=NUMERIC }
+			</if>
+	</update>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_member
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+			<if test="company_name != null and company_name != ''">and company_name=#{company_name, jdbcType=VARCHAR}</if>
+			<if test="company_leader != null and company_leader != ''">and company_leader=#{company_leader, jdbcType=VARCHAR}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="invite_code != null and invite_code != ''">and invite_code=#{invite_code, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

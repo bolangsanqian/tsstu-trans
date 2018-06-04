@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 数据字典(sys_dictionary) -->
+<mapper namespace="com.tsstu.console.dao.DictionaryMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Dictionary">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dict_name" property="dict_name" jdbcType="VARCHAR" />
+		<result column="dict_code" property="dict_code" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<collection property="itemList" column="{dict_code=dict_code}" select="getItemList" />
+	</resultMap>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_dictionary
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dict_name != null">dict_name,</if>
+			<if test="dict_code != null">dict_code,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="dict_name != null">#{dict_name, jdbcType=VARCHAR},</if>
+			<if test="dict_code != null">#{dict_code, jdbcType=VARCHAR},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_dictionary
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_dictionary
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_dictionary
+		set 
+		<trim suffixOverrides="," >
+			<if test="dict_name != null">dict_name=#{dict_name, jdbcType=VARCHAR},</if>
+			<if test="dict_code != null">dict_code=#{dict_code, jdbcType=VARCHAR},</if>
+			<if test="remark != null">remark=#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			dict_name,
+			dict_code,
+			remark
+		from  
+			sys_dictionary 
+		where 
+			id = #{id} limit 1
+	</select>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			dict_name,
+			dict_code,
+			remark
+		from 
+			sys_dictionary
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					dict_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or dict_code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or remark like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="dict_name != null and dict_name != ''">
+				and dict_name = #{dict_name }
+			</if>
+			<if test="dict_code != null and dict_code != ''">
+				and dict_code = #{dict_code }
+			</if>
+		</trim>
+		order by id desc
+	</select>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_dictionary
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="dict_name != null and dict_name != ''">and dict_name=#{dict_name, jdbcType=VARCHAR}</if>
+			<if test="dict_code != null and dict_code != ''">and dict_code=#{dict_code, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getItemList" resultType="com.tsstu.console.model.DictionaryItem">
+		select 
+			id,
+			dict_code,
+			item_name,
+			item_value,
+			sort
+		from  
+			sys_dictionary_item 
+		where 
+			dict_code = #{dict_code }
+		order by sort 
+	</select>
+</mapper>

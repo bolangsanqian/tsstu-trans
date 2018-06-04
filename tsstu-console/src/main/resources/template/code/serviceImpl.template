@@ -1,0 +1,26 @@
+package com.tsstu.console.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tsstu.console.dao.BaseMapper;
+import com.tsstu.console.dao.${objectName}Mapper;
+import com.tsstu.console.model.${objectName};
+import com.tsstu.console.service.${objectName}Service;
+
+/**
+ * ${title}业务实现类
+ * @author： ${author}
+ * @date： ${nowDate?string("yyyy-MM-dd")}
+ */
+@Service
+public class ${objectName}ServiceImpl extends BaseServiceImpl<${objectName}> implements ${objectName}Service {
+
+    @Autowired
+    private ${objectName}Mapper ${objectName?uncap_first}Mapper;
+    
+    @Override
+	public BaseMapper<${objectName}> getDao() {
+		return ${objectName?uncap_first}Mapper;
+	}
+}

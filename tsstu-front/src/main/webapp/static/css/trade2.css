@@ -1,0 +1,145 @@
+/*******************/
+.tsstu-header {
+	margin-top: 88px;
+	width: 100%;
+	height: 120px;
+}
+
+.tsstu-header ul {
+	width: 100%;
+	height: 120px;
+}
+
+.tsstu-header ul li {
+	height: 120px;
+	float: left;
+	width: 20%;
+}
+
+.tsstu-header ul li  {
+	font-size: 26px;
+}
+
+.tsstu-header li.real-time {
+    font-size: 48px !important;
+    text-align: center;
+    height: 120px;
+    line-height: 120px;
+    font-weight: 800;
+    color: #1fc65b !important;
+    width: 40% !important;
+    text-align: center;
+}
+
+.tsstu-header .real-time p {
+	height: 120px;
+	line-height: 120px; 
+}
+
+.tsstu-header .open p,
+.tsstu-header .high p,
+.tsstu-header .low p {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.tsstu-header .price {
+	color: #fa2e42;
+}
+
+.tsstu-header .title {
+	padding-top: 20px;
+	color: black;
+}
+
+
+/************************/
+.tsstu-nav,
+.tsstu-nav ul {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+.tsstu-nav li {
+	width: 12%;
+	float: left;
+	height: 44px;
+	line-height: 44px;
+	font-size: 24px;
+}
+
+.tsstu-nav li.switch {
+	width: 26%;
+    height: 52px;
+    line-height: 52px;
+    border-radius: 0.1rem;
+    font-weight: bold;
+}
+.tsstu-nav li.switch span {
+	width: 45%;
+	height: 44px;
+    line-height: 44px;
+    text-align: center;
+    display: block;
+    float: left;
+    margin-left: 2px;
+}
+
+.tsstu-nav li.switch span.active {
+	color: #4285f4;
+	border-bottom: 2px solid #4285f4;
+}
+
+.tsstu-nav li.switch span.k {
+}
+
+.tsstu-nav li.active {
+    color: #fdbe19;
+    border-bottom: 2px solid #fdbe19;
+}
+
+
+/*******************************/
+.tsstu-button {
+	width: 100%;
+	height: 100px;
+	line-height: 100px;
+	position: fixed;
+	bottom: 0px;
+}
+
+.tsstu-button ul {
+	width: 100%;
+	height: 100px;
+	line-height: 100px;
+}
+
+.tsstu-button ul li {
+	height: 100px;
+	line-height: 100px;
+	float: left;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+	font-size: 40px;
+}
+
+.tsstu-button ul li.hold {
+	width: 30%;
+	/**border-radius: 10px;**/
+	background-color: #bcd1e6;
+}
+
+.tsstu-button ul li.buy-up {
+	width: 35%;
+	background-color: #d83f4e;
+}
+
+.tsstu-button ul li.buy-down {
+	width: 35%;
+	background-color: #1fc65b;
+}
+
+

@@ -1,0 +1,197 @@
+/* 遮盖层 */
+.tsstu-mask {
+	display: none;
+    background-color: black;
+    overflow: hidden;
+    -moz-opacity: 0.6;
+    opacity: .60;
+    filter: alpha(opacity=60);
+    position: fixed;
+    top: 0;
+    left: 0px;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+/* 对话框  */
+.tsstu-dialog {
+	width: 100%;
+	z-index: 1000;
+	position: fixed;
+	bottom: 0;
+    margin: auto;
+    display: none;
+    font-size: 25px;
+}
+.tsstu-dialog .header {
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	background-color: #f85255;
+	text-align: center;
+	color: #fff;
+}
+.tsstu-dialog .header {
+	width: 100%;
+}
+.tsstu-dialog .title {
+	font-size: 32px;
+}
+.tsstu-dialog .close {
+	right: 0px; 
+	position: absolute;
+	height: 80px;
+	line-height:65px;
+	width: 60px;
+	vertical-align: middle;
+}
+.tsstu-dialog .body {
+    background-color: #f2f2f2;
+}
+/* 时间选择  */
+.tsstu-dialog .time {
+	height: 150px;
+	display: block;
+	background-color: #fff;
+	margin-bottom: 10px;
+}
+.tsstu-dialog .time .label {
+	padding: 10px 30px;
+}
+.tsstu-dialog .time-list {
+	overflow: hidden;
+	height: 80px;
+}
+.tsstu-dialog .time-list>div {
+	margin: 0 auto;
+	width: 92%;
+}
+/* .tsstu-dialog .time ul {
+	height: 100px;
+	width: 1200px;
+} */
+.tsstu-dialog .time li {
+	float: left;
+	padding: 20px 0px;
+	width: 120px;
+	margin-right: 20px;
+	text-align: center;
+	border-width: 1px;
+    border-style: solid;
+    border-color: #CCC;
+    border-radius: 10px;
+}
+.tsstu-dialog .time li.active {
+	padding: 19px 0px !important;
+	width: 118px !important;
+	border-width: 2px !important;
+	border-color: #fdbe19 !important;
+}
+/* 金额选择  */
+.tsstu-dialog .money {
+	height: 150px;
+	display: block;
+	background-color: #fff;
+}
+.tsstu-dialog .money .label {
+	padding: 10px 30px;
+}
+.tsstu-dialog .money-list {
+	overflow: hidden;
+	height: 80px;
+}
+.tsstu-dialog .money-list>div {
+	margin: 0 auto;
+	width: 92%;
+}
+.tsstu-dialog .money ul {
+	height: 100%;
+}
+.tsstu-dialog .money li {
+	float: left;
+	padding: 20px 0px;
+	width: 120px;
+	margin-right: 20px;
+	text-align: center;
+	border-width: 1px;
+    border-style: solid;
+    border-color: #CCC;
+    border-radius: 10px;
+    height: auto !important;
+}
+.tsstu-dialog .money li.active {
+	padding: 19px 0px !important;
+	width: 118px !important;
+	border-width: 2px !important;
+	border-color: #fdbe19 !important;
+}
+
+/* 汇总 */
+.tsstu-dialog .sum {
+	height: 100px;
+	display: block;
+	background-color: #fff;
+	margin-bottom: 10px;
+}
+.tsstu-dialog .sum .title {
+	padding-top: 20px;
+	font-size: 25px;
+}
+.tsstu-dialog .sum .text {
+	padding-top: 10px;
+	font-size: 25px;
+	color: #fa2e42;
+}
+.tsstu-dialog .sum li {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+.tsstu-dialog .time li,
+.tsstu-dialog .money li {
+	float: left;
+}
+
+/* 按钮 */
+.tsstu-dialog .button {
+	padding-top: 30px;
+	height: 120px;
+	display: block;
+	background-color: #fff;
+}
+/* .tsstu-dialog .button a {
+    display: block;
+    width: 95%;
+    height: 90px;
+    font-size: 32px;
+    color: #fff;
+    background-color: #f85255;
+    text-align: center;
+    line-height: 90px;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-bottom: 200px;
+} */
+.tsstu-dialog .button a {
+    display: block;
+    width: 45%;
+    height: 90px;
+    font-size: 32px;
+    color: #fff;
+    background-color: #f85255;
+    text-align: center;
+    line-height: 90px;
+    border-radius: 10px;
+    margin: 0 auto;
+    
+}
+.tsstu-dialog .button a.ok {
+	margin-right: 20px;
+	float: right;
+}
+.tsstu-dialog .button a.cancel {
+	margin-left: 20px;
+	float: left;
+	background-color: #bcd1e6 !important;
+}

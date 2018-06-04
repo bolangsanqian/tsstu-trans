@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 银行管理(sys_bank) -->
+<mapper namespace="com.tsstu.console.dao.BankMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Bank">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="bank_name" property="bank_name" jdbcType="VARCHAR" />
+		<result column="bank_no" property="bank_no" jdbcType="VARCHAR" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="purpose" property="purpose" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			bank_name,
+			bank_no,
+			icon,
+			purpose,
+			status
+		from 
+			sys_bank
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 bank_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or bank_no like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="bank_name != null and bank_name != ''">
+				and bank_name = #{bank_name}
+			</if>
+			<if test="bank_no != null and bank_no != ''">
+				and bank_no = #{bank_no}
+			</if>
+			<if test="purpose != null and purpose != ''">
+				and purpose = #{purpose}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			bank_name,
+			bank_no,
+			icon,
+			purpose,
+			status
+		from  
+			sys_bank 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_bank
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="bank_name != null">bank_name,</if>
+			<if test="bank_no != null">bank_no,</if>
+			<if test="icon != null">icon,</if>
+			<if test="purpose != null">purpose,</if>
+			<if test="status != null">status,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="bank_name != null">#{bank_name, jdbcType=VARCHAR},</if>
+			<if test="bank_no != null">#{bank_no, jdbcType=VARCHAR},</if>
+			<if test="icon != null">#{icon, jdbcType=VARCHAR},</if>
+			<if test="purpose != null">#{purpose, jdbcType=INTEGER},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_bank
+		set 
+		<trim suffixOverrides="," >
+			<if test="bank_name != null">bank_name=#{bank_name, jdbcType=VARCHAR},</if>
+			<if test="bank_no != null">bank_no=#{bank_no, jdbcType=VARCHAR},</if>
+			<if test="icon != null">icon=#{icon, jdbcType=VARCHAR},</if>
+			<if test="purpose != null">purpose=#{purpose, jdbcType=INTEGER},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_bank
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_bank
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_bank
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="bank_name != null and bank_name != ''">and bank_name=#{bank_name, jdbcType=VARCHAR}</if>
+			<if test="bank_no != null and bank_no != ''">and bank_no=#{bank_no, jdbcType=VARCHAR}</if>
+			<if test="icon != null and icon != ''">and icon=#{icon, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

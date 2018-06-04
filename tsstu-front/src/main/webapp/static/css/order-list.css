@@ -1,0 +1,123 @@
+body {
+	background-color: #f2f2f2;
+}
+
+.tsstu-tabs {
+	height: 72px;
+	width: 100%;
+	display: flex;
+	position: fixed;
+	margin-top: 88px;
+}
+
+.tsstu-tabs li {
+	width: 96%;
+	height: 60px;
+	text-align: center;
+	padding: 5px 0px;
+	vertical-align: middle;
+	line-height: 63px;
+	height: 63px;
+	background-color: #eeeeee;
+	color: #2b5f91;
+	font-size: 30px;
+}
+
+.tsstu-tabs li.active {
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: blue;
+	color: #F17B00;
+}
+
+.tsstu-tabs .tab-hold {
+	float: left;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #FFF;
+}
+
+.tsstu-tabs .tab-hisotry {
+	float: right;
+	float: left;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #FFF;
+}
+
+.tsstu-list {
+	background-color: #f2f2f2;
+	width: 100%;
+	padding-top: 162px;
+	padding-bottom: 200px;
+}
+
+.tsstu-list li {
+	height: 135px;
+	padding-top: 15px;
+	vertical-align: middle;
+	margin-bottom: 15px;
+	background-color: white;
+	/*border-bottom: 1px solid #171717;*/
+}
+
+.tsstu-list li div.left {
+	float: left;
+	width: 56%;
+	padding-left: 20px;
+	margin-top: 8px;
+}
+
+.tsstu-list li div.right {
+	float: right;
+	width: 38%;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.tsstu-list li p {
+	padding: 5px 0px;
+}
+
+.tsstu-list li .name {
+	font-size: 25px;
+}
+
+.tsstu-list li .icon {
+	width: 20px;
+	height: 20px;
+	padding-left: 30px;
+}
+
+.tsstu-list li .amount {
+	font-size: 25px;
+}
+
+.tsstu-list li .price {
+	font-size: 22px;
+}
+
+.tsstu-list li .open-time {
+	font-size: 22px;
+}
+
+.tsstu-list li .yk-amount {
+	font-size: 40px;
+	padding: 10px 0px;
+}
+
+.tsstu-list li .close-time {
+	font-size: 25px;
+}
+
+.tsstu-list li .yl {
+	color: #fa2e42 !important;
+}
+
+.tsstu-list li .ks {
+	color: #1fc65b !important;
+}
+
+#history-list {
+	display: none;
+}

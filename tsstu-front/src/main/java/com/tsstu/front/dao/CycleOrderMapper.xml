@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 周期订单(wp_cycle_order) -->
+<mapper namespace="com.tsstu.front.dao.CycleOrderMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.front.model.CycleOrder">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="flow_no" property="flow_no" jdbcType="VARCHAR" />
+		<result column="cycle_product_id" property="cycle_product_id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="product_code" property="product_code" jdbcType="VARCHAR" />
+		<result column="product_name" property="product_name" jdbcType="VARCHAR" />
+		<result column="product_category_id" property="product_category_id" jdbcType="INTEGER" />
+		<result column="product_category_code" property="product_category_code" jdbcType="VARCHAR" />
+		<result column="open_price" property="open_price" jdbcType="NUMERIC" />
+		<result column="close_price" property="close_price" jdbcType="NUMERIC" />
+		<result column="direction" property="direction" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="NUMERIC" />
+		<result column="yk_amount" property="yk_amount" jdbcType="NUMERIC" />
+		<result column="fee" property="fee" jdbcType="NUMERIC" />
+		<result column="hold_time" property="hold_time" jdbcType="INTEGER" />
+		<result column="time_unit" property="time_unit" jdbcType="VARCHAR" />
+		<result column="profit" property="profit" jdbcType="INTEGER" />
+		<result column="open_time" property="open_time" jdbcType="TIMESTAMP" />
+		<result column="close_time" property="close_time" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="settlement_type" property="settlement_type" jdbcType="INTEGER" />
+		<result column="settlement_time" property="settlement_time" jdbcType="TIMESTAMP" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="close_timestamp" property="close_timestamp" jdbcType="INTEGER" />
+		<result column="out_fee_part" property="out_fee_part" jdbcType="INTEGER" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		<result column="open_timestamp" property="open_timestamp" jdbcType="INTEGER" />
+		
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select 
+			o.id,
+			o.flow_no,
+			o.cycle_product_id,
+			o.product_category_id,
+			o.product_category_code,
+			o.customer_id,
+			o.product_code,
+			o.product_name,
+			o.open_price,
+			o.close_price,
+			o.direction,
+			o.amount,
+			o.yk_amount,
+			o.fee,
+			o.hold_time,
+			o.time_unit,
+			o.profit,
+			o.open_time,
+			o.close_time,
+			o.status,
+			o.close_timestamp,
+			o.open_timestamp
+		from  
+			wp_cycle_order o left join wp_customer c on o.customer_id = c.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="status != null and status != ''">
+				and o.status = #{status}
+			</if>
+			<if test="close_timestamp != null and close_timestamp != ''">
+				and o.close_timestamp = #{close_timestamp}
+			</if>
+		</trim>
+		<if test="orderBy == null or orderBy == ''">
+			order by o.id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			o.id,
+			o.flow_no,
+			o.cycle_product_id,
+			o.product_category_id,
+			o.product_category_code,
+			o.customer_id,
+			o.product_code,
+			o.product_name,
+			o.open_price,
+			o.close_price,
+			o.direction,
+			o.amount,
+			o.yk_amount,
+			o.fee,
+			o.hold_time,
+			o.time_unit,
+			o.profit,
+			o.open_time,
+			o.close_time,
+			o.status,
+			o.settlement_type,
+			o.settlement_time,
+			o.member_id,
+			o.close_timestamp,
+			o.out_fee_part,
+			o.operation_member_id,
+			o.agent_member_id,
+			o.open_timestamp
+		from  
+			wp_cycle_order o 
+		where 
+			o.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_cycle_order
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="flow_no != null">flow_no,</if>
+			<if test="cycle_product_id != null">cycle_product_id,</if>
+			<if test="product_category_id != null">product_category_id,</if>
+			<if test="product_category_code != null">product_category_code,</if>
+			<if test="customer_id != null">customer_id,</if>
+			<if test="product_code != null">product_code,</if>
+			<if test="product_name != null">product_name,</if>
+			<if test="open_price != null">open_price,</if>
+			<if test="close_price != null">close_price,</if>
+			<if test="direction != null">direction,</if>
+			<if test="amount != null">amount,</if>
+			<if test="yk_amount != null">yk_amount,</if>
+			<if test="fee != null">fee,</if>
+			<if test="hold_time != null">hold_time,</if>
+			<if test="time_unit != null">time_unit,</if>
+			<if test="profit != null">profit,</if>
+			<if test="open_time != null">open_time,</if>
+			<if test="close_time != null">close_time,</if>
+			<if test="status != null">status,</if>
+			<if test="settlement_type != null">settlement_type,</if>
+			<if test="settlement_time != null">settlement_time,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="close_timestamp != null">close_timestamp,</if>
+			<if test="out_fee_part != null">out_fee_part,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+			<if test="open_timestamp != null">open_timestamp,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="flow_no != null">#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="cycle_product_id != null">#{cycle_product_id, jdbcType=INTEGER},</if>
+			<if test="product_category_id != null">#{product_category_id, jdbcType=INTEGER},</if>
+			<if test="product_category_code != null">#{product_category_code, jdbcType=VARCHAR},</if>
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="product_code != null">#{product_code, jdbcType=VARCHAR},</if>
+			<if test="product_name != null">#{product_name, jdbcType=VARCHAR},</if>
+			<if test="open_price != null">#{open_price, jdbcType=NUMERIC},</if>
+			<if test="close_price != null">#{close_price, jdbcType=NUMERIC},</if>
+			<if test="direction != null">#{direction, jdbcType=INTEGER},</if>
+			<if test="amount != null">#{amount, jdbcType=NUMERIC},</if>
+			<if test="yk_amount != null">#{yk_amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">#{fee, jdbcType=NUMERIC},</if>
+			<if test="hold_time != null">#{hold_time, jdbcType=INTEGER},</if>
+			<if test="time_unit != null">#{time_unit, jdbcType=VARCHAR},</if>
+			<if test="profit != null">#{profit, jdbcType=INTEGER},</if>
+			<if test="open_time != null">#{open_time, jdbcType=TIMESTAMP},</if>
+			<if test="close_time != null">#{close_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="settlement_type != null">#{settlement_type, jdbcType=INTEGER},</if>
+			<if test="settlement_time != null">#{settlement_time, jdbcType=TIMESTAMP},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="close_timestamp != null">#{close_timestamp, jdbcType=INTEGER},</if>
+			<if test="out_fee_part != null">#{out_fee_part, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="open_timestamp != null">#{open_timestamp, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_cycle_order
+		set 
+		<trim suffixOverrides="," >
+			<if test="flow_no != null">flow_no=#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="cycle_product_id != null">cycle_product_id=#{cycle_product_id, jdbcType=INTEGER},</if>
+			<if test="customer_id != null">customer_id=#{customer_id, jdbcType=INTEGER},</if>
+			<if test="product_code != null">product_code=#{product_code, jdbcType=VARCHAR},</if>
+			<if test="product_name != null">product_name=#{product_name, jdbcType=VARCHAR},</if>
+			<if test="open_price != null">open_price=#{open_price, jdbcType=NUMERIC},</if>
+			<if test="close_price != null">close_price=#{close_price, jdbcType=NUMERIC},</if>
+			<if test="direction != null">direction=#{direction, jdbcType=INTEGER},</if>
+			<if test="amount != null">amount=#{amount, jdbcType=NUMERIC},</if>
+			<if test="yk_amount != null">yk_amount=#{yk_amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">fee=#{fee, jdbcType=NUMERIC},</if>
+			<if test="hold_time != null">hold_time=#{hold_time, jdbcType=INTEGER},</if>
+			<if test="time_unit != null">time_unit=#{time_unit, jdbcType=VARCHAR},</if>
+			<if test="profit != null">profit=#{profit, jdbcType=INTEGER},</if>
+			<if test="open_time != null">open_time=#{open_time, jdbcType=TIMESTAMP},</if>
+			<if test="close_time != null">close_time=#{close_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="settlement_type != null">settlement_type=#{settlement_type, jdbcType=INTEGER},</if>
+			<if test="settlement_time != null">settlement_time=#{settlement_time, jdbcType=TIMESTAMP},</if>
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="close_timestamp != null">close_timestamp=#{close_timestamp, jdbcType=INTEGER},</if>
+			<if test="out_fee_part != null">out_fee_part=#{out_fee_part, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">operation_member_id=#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">agent_member_id=#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="open_timestamp != null">open_timestamp=#{open_timestamp, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_cycle_order
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_cycle_order
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_cycle_order
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="flow_no != null and flow_no != ''">and flow_no=#{flow_no, jdbcType=VARCHAR}</if>
+			<if test="product_code != null and product_code != ''">and product_code=#{product_code, jdbcType=VARCHAR}</if>
+			<if test="product_name != null and product_name != ''">and product_name=#{product_name, jdbcType=VARCHAR}</if>
+			<if test="time_unit != null and time_unit != ''">and time_unit=#{time_unit, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

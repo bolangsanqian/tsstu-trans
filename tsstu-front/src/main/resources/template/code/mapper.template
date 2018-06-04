@@ -1,0 +1,13 @@
+package com.tsstu.console.dao;
+
+import com.tsstu.console.model.${objectName};
+
+/**
+ * ${title}Mapper 接口
+ * @author： ${author}
+ * @date： ${nowDate?string("yyyy-MM-dd")}
+ **/
+public interface ${objectName}Mapper extends BaseMapper<${objectName}> {
+
+	
+}

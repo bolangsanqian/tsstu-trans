@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 经纪人申请(wp_broker_apply) -->
+<mapper namespace="com.tsstu.console.dao.BrokerApplyMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.BrokerApply">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="apply_time" property="apply_time" jdbcType="TIMESTAMP" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		<result column="review_by" property="review_by" jdbcType="INTEGER" />
+		<result column="review_by_name" property="review_by_name" jdbcType="VARCHAR" />
+		<result column="review_time" property="review_time" jdbcType="TIMESTAMP" />
+		<result column="review_remark" property="review_remark" jdbcType="VARCHAR" />
+		<result column="review_status" property="review_status" jdbcType="INTEGER" />
+		
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			b.id,
+			b.customer_id,
+			b.username,
+			b.password,
+			b.apply_time,
+			b.operation_member_id,
+			b.member_id,
+			b.agent_member_id,
+			b.review_by,
+			b.review_time,
+			b.review_remark,
+			b.review_status,
+			c.mobile,
+			c.nick_name,
+			u.username review_by_name
+		from 
+			wp_broker_apply b left join wp_customer c on b.customer_id = c.id
+			left join sys_user u on u.id = b.review_by
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 b.username like CONCAT(CONCAT('%', #{keywords }),'%')
+					 or c.nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					 or c.mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="customer_id != null and customer_id != ''">
+				and b.customer_id = #{customer_id}
+			</if>
+			<if test="username != null and username != ''">
+				and b.username = #{username}
+			</if>
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				and b.apply_time &gt;= #{apply_time_begin}
+			</if>
+			<if test="apply_time_end != null and apply_time_end != ''">
+				and b.apply_time &lt;= #{apply_time_end}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and b.operation_member_id = #{operation_member_id}
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and b.member_id = #{member_id}
+			</if>
+			<if test="agent_member_id != null and agent_member_id != ''">
+				and b.agent_member_id = #{agent_member_id}
+			</if>
+			<if test="review_by != null and review_by != ''">
+				and b.review_by = #{review_by}
+			</if>
+			<if test="review_status != null and review_status != ''">
+				and b.review_status = #{review_status}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by b.review_status asc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select
+			b.id,
+			b.customer_id,
+			b.username,
+			b.password,
+			b.apply_time,
+			b.operation_member_id,
+			b.member_id,
+			b.agent_member_id,
+			b.review_by,
+			b.review_time,
+			b.review_remark,
+			b.review_status,
+			c.mobile,
+			c.nick_name,
+			u.username review_by_name
+		from 
+			wp_broker_apply b left join wp_customer c on b.customer_id = c.id
+			left join sys_user u on u.id = b.review_by
+		where 
+			b.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_broker_apply
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">customer_id,</if>
+			<if test="username != null">username,</if>
+			<if test="password != null">password,</if>
+			<if test="apply_time != null">apply_time,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+			<if test="review_by != null">review_by,</if>
+			<if test="review_time != null">review_time,</if>
+			<if test="review_status != null">review_status,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="username != null">#{username, jdbcType=VARCHAR},</if>
+			<if test="password != null">#{password, jdbcType=VARCHAR},</if>
+			<if test="apply_time != null">#{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="review_by != null">#{review_by, jdbcType=INTEGER},</if>
+			<if test="review_time != null">#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_status != null">#{review_status, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_broker_apply
+		set 
+		<trim suffixOverrides="," >
+			<if test="customer_id != null">customer_id = #{customer_id, jdbcType=INTEGER},</if>
+			<if test="username != null">username = #{username, jdbcType=VARCHAR},</if>
+			<if test="password != null">password = #{password, jdbcType=VARCHAR},</if>
+			<if test="apply_time != null">apply_time = #{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="operation_member_id != null">operation_member_id = #{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">member_id = #{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">agent_member_id = #{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="review_by != null">review_by = #{review_by, jdbcType=INTEGER},</if>
+			<if test="review_time != null">review_time = #{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_remark != null">review_remark = #{review_remark, jdbcType=VARCHAR},</if>
+			<if test="review_status != null">review_status = #{review_status, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_broker_apply
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_broker_apply
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_broker_apply
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="username != null and username != ''">and username=#{username, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

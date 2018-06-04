@@ -1,0 +1,12 @@
+package com.tsstu.console.service;
+
+import com.tsstu.console.model.${objectName};
+
+/**
+ * ${title}业务接口
+ * @author： ${author}
+ * @date：${nowDate?string("yyyy-MM-dd")}
+ **/
+public interface ${objectName}Service extends BaseService<${objectName}> {
+
+}

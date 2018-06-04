@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 用户角色中间表(sys_user_role) -->
+<mapper namespace="com.tsstu.console.dao.UserRoleMapper" >
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.UserRole">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="group_id" jdbcType="INTEGER" />
+		<result column="role_id" property="role_id" jdbcType="INTEGER" />
+	</resultMap>
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select 
+			id,
+			user_id,
+			role_id
+		from 
+			sys_user_role	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_id != null and user_id != ''">
+				and user_id = #{user_id}
+			</if>
+		</trim>
+		
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			user_id,
+			role_id
+		from 
+			sys_user_role	
+		where
+			id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_user_role
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">user_id,</if>
+			<if test="role_id != null">role_id,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">#{user_id, jdbcType=INTEGER},</if>
+			<if test="role_id != null">#{role_id, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_user_role
+		set 
+		<trim suffixOverrides="," >
+			<if test="user_id != null">user_id=#{user_id, jdbcType=INTEGER},</if>
+			<if test="role_id != null">role_id=#{role_id, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 根据id删除 -->
+	<delete id="delete">
+		delete  from
+			sys_user_role
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_id != null and user_id != ''">
+				and user_id = #{user_id}
+			</if>
+		</trim>
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_user_role
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+</mapper>

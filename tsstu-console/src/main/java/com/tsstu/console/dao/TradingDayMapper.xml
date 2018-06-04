@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 交易日管理(wp_trading_day) -->
+<mapper namespace="com.tsstu.console.dao.TradingDayMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.TradingDay">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="product_category_id" property="product_category_id" jdbcType="INTEGER" />
+		<result column="week" property="week" jdbcType="INTEGER" />
+		<result column="opening_time" property="opening_time" jdbcType="VARCHAR" />
+		<result column="closing_time" property="closing_time" jdbcType="VARCHAR" />
+		<result column="closing_day" property="closing_day" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			product_category_id,
+			week,
+			opening_time,
+			closing_time,
+			closing_day
+		from 
+			wp_trading_day
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="product_category_id != null and product_category_id != ''">
+				and product_category_id = #{product_category_id}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			product_category_id,
+			week,
+			opening_time,
+			closing_time,
+			closing_day
+		from  
+			wp_trading_day 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="week != null and week != ''">
+				and week = #{week}
+			</if>
+			<if test="product_category_id != null and product_category_id != ''">
+				and product_category_id = #{product_category_id}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_trading_day
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="product_category_id != null">product_category_id,</if>
+			<if test="week != null">week,</if>
+			<if test="opening_time != null">opening_time,</if>
+			<if test="closing_time != null">closing_time,</if>
+			<if test="closing_day != null">closing_day,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="product_category_id != null">#{product_category_id, jdbcType=INTEGER},</if>
+			<if test="week != null">#{week, jdbcType=INTEGER},</if>
+			<if test="opening_time != null">#{opening_time, jdbcType=VARCHAR},</if>
+			<if test="closing_time != null">#{closing_time, jdbcType=VARCHAR},</if>
+			<if test="closing_day != null">#{closing_day, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_trading_day
+		set 
+		<trim suffixOverrides="," >
+			<if test="week != null">week=#{week, jdbcType=INTEGER},</if>
+			<if test="opening_time != null">opening_time=#{opening_time, jdbcType=VARCHAR},</if>
+			<if test="closing_time != null">closing_time=#{closing_time, jdbcType=VARCHAR},</if>
+			<if test="closing_day != null">closing_day=#{closing_day, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_trading_day
+		where 
+		<trim prefixOverrides="and" suffixOverrides="," >
+			<if test="id != null">and id=#{id, jdbcType=INTEGER},</if>
+			<if test="product_category_id != null">and product_category_id=#{product_category_id, jdbcType=INTEGER},</if>
+	    </trim>
+		
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_trading_day
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_trading_day
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="opening_time != null and opening_time != ''">and opening_time=#{opening_time, jdbcType=VARCHAR</if>
+			<if test="closing_time != null and closing_time != ''">and closing_time=#{closing_time, jdbcType=VARCHAR</if>
+			<if test="closing_day != null and closing_day != ''">and closing_day=#{closing_day, jdbcType=INTEGER</if>
+		</trim>
+	</select>
+</mapper>

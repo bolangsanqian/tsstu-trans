@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tsstu.console.dao.PermissionMapper" >
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Permission" >
+	  <id column="id" property="id" jdbcType="INTEGER" />
+	  <result column="name" property="name" jdbcType="VARCHAR" />
+	  <result column="pid" property="pid" jdbcType="INTEGER" />
+	  <result column="url" property="url" jdbcType="VARCHAR" />
+	  <result column="permission_type" property="permission_type" jdbcType="INTEGER" />
+	  <result column="permission_sign" property="permission_sign" jdbcType="VARCHAR" />
+	  <result column="sort" property="sort" jdbcType="INTEGER" />
+	  <result column="icon" property="icon" jdbcType="VARCHAR" />
+	  <result column="status" property="status" jdbcType="INTEGER" />
+	  <result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select 
+			id,
+			name,
+			pid,
+			url,
+			permission_type,
+			permission_sign,
+			sort,
+			icon,
+			status,
+			remark
+		from 
+			sys_permission	
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or permission_sign like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="permission_sign != null and permission_sign != ''">
+				and permission_sign = #{permission_sign}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="pid != null and pid != ''">
+				and pid = #{pid}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by sort asc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			name,
+			pid,
+			url,
+			permission_type,
+			permission_sign,
+			sort,
+			icon,
+			status,
+			remark
+		from 
+			sys_permission	
+		where
+			id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_permission
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="name != null">name,</if>
+			<if test="pid != null">pid,</if>
+			<if test="url != null">url,</if>
+			<if test="permission_type != null">permission_type,</if>
+			<if test="permission_sign != null">permission_sign,</if>
+			<if test="sort != null">sort,</if>
+			<if test="icon != null">icon,</if>
+			<if test="status != null">status,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="pid != null">#{pid, jdbcType=INTEGER},</if>
+			<if test="url != null">#{url, jdbcType=VARCHAR},</if>
+			<if test="permission_type != null">#{permission_type, jdbcType=VARCHAR},</if>
+			<if test="permission_sign != null">#{permission_sign, jdbcType=INTEGER},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="icon != null">#{icon, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_permission
+		set 
+		<trim suffixOverrides="," >
+			<if test="name != null">name = #{name, jdbcType=VARCHAR},</if>
+			<if test="pid != null">pid = #{pid, jdbcType=INTEGER},</if>
+			<if test="url != null">url = #{url, jdbcType=VARCHAR},</if>
+			<if test="permission_type != null">permission_type = #{permission_type, jdbcType=VARCHAR},</if>
+			<if test="permission_sign != null">permission_sign = #{permission_sign, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort = #{sort, jdbcType=INTEGER},</if>
+			<if test="icon != null">icon = #{icon, jdbcType=VARCHAR},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="remark != null">remark = #{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="Integer">
+		delete  from
+			sys_permission
+		where
+			id = #{id}
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_permission
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+	
+	<!-- 根据角色ID查询权限列表 -->
+	<select id="getListByRoleId" resultMap="BaseResultMap">
+		select 
+			p.id,
+			p.name,
+			p.pid,
+			p.url,
+			p.permission_type,
+			p.permission_sign,
+			p.sort,
+			p.icon,
+			p.status,
+			p.remark
+		from 
+			(select * from sys_role_permission where role_id = #{roleId}) rp
+			left join sys_permission p on p.id = rp.permission_id
+		where p.status = 1
+	</select>
+	
+	<!-- 根据用户ID查询权限列表 -->
+	<select id="getListByUserId" resultMap="BaseResultMap">
+		select 
+			p.id,
+			p.name,
+			p.pid,
+			p.url,
+			p.permission_type,
+			p.permission_sign,
+			p.sort,
+			p.icon,
+			p.status,
+			p.remark
+		from 
+			(select role_id from sys_user_role where user_id = #{userId }) r
+		join sys_role_permission rp on r.role_id = rp.role_id
+		left join sys_permission p on rp.permission_id = p.id
+		where p.status = 1
+	</select>
+	
+	<!-- 统计数量 -->
+	<select id="getCount" resultType="java.lang.Integer">
+		select 
+			count(1)
+		from 
+			sys_permission
+		where pid = #{id}
+	</select>
+
+</mapper>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 加减币管理(wp_fund_change) -->
+<mapper namespace="com.tsstu.console.dao.FundChangeMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.FundChange">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="flow_no" property="flow_no" jdbcType="VARCHAR" />
+		<result column="change_type" property="change_type" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="NUMERIC" />
+		<result column="apply_id" property="apply_id" jdbcType="INTEGER" />
+		<result column="apply_reason" property="apply_reason" jdbcType="VARCHAR" />
+		<result column="apply_time" property="apply_time" jdbcType="TIMESTAMP" />
+		<result column="review_id" property="review_id" jdbcType="INTEGER" />
+		<result column="review_time" property="review_time" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="review_remark" property="review_remark" jdbcType="VARCHAR" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			f.id,
+			f.customer_id,
+			f.flow_no,
+			f.change_type,
+			f.amount,
+			f.apply_id,
+			f.apply_reason,
+			f.apply_time,
+			f.review_id,
+			f.review_time,
+			f.status,
+			f.review_remark,
+			f.operation_member_id,
+			f.member_id,
+			f.agent_member_id,
+			c.mobile,
+			c.nick_name
+		from 
+			wp_fund_change f left join wp_customer c on f.customer_id = c.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 f.flow_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or f.apply_reason like CONCAT(CONCAT('%', #{keywords }),'%')
+					or f.review_remark like CONCAT(CONCAT('%', #{keywords }),'%')
+					or c.nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or c.mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="flow_no != null and flow_no != ''">
+				and f.flow_no = #{flow_no}
+			</if>
+			<if test="change_type != null and change_type != ''">
+				and f.change_type = #{change_type}
+			</if>
+			<if test="amount != null and amount != ''">
+				and f.amount = #{amount}
+			</if>
+			<if test="apply_id != null and apply_id != ''">
+				and f.apply_id = #{apply_id}
+			</if>
+			<if test="apply_reason != null and apply_reason != ''">
+				and f.apply_reason = #{apply_reason}
+			</if>
+			<if test="apply_time_begin != null and apply_time_begin != ''">
+				and f.apply_time &gt;= #{apply_time_begin}
+			</if>
+			<if test="apply_time_end != null and apply_time_end != ''">
+				and f.apply_time &lt;= #{apply_time_end}
+			</if>
+			<if test="status != null and status != ''">
+				and f.status = #{status}
+			</if>
+			<if test="review_remark != null and review_remark != ''">
+				and f.review_remark = #{review_remark}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and f.operation_member_id = #{operation_member_id}
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and f.member_id = #{member_id}
+			</if>
+			<if test="agent_member_id != null and agent_member_id != ''">
+				and f.agent_member_id = #{agent_member_id}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and c.mobile = #{mobile}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			f.id,
+			f.customer_id,
+			f.flow_no,
+			f.change_type,
+			f.amount,
+			f.apply_id,
+			f.apply_reason,
+			f.apply_time,
+			f.review_id,
+			f.review_time,
+			f.status,
+			f.review_remark,
+			f.operation_member_id,
+			f.member_id,
+			f.agent_member_id,
+			c.mobile,
+			c.nick_name
+		from  
+			wp_fund_change f left join wp_customer c on f.customer_id = c.id
+		where 
+			f.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_fund_change
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">customer_id,</if>
+			<if test="flow_no != null">flow_no,</if>
+			<if test="change_type != null">change_type,</if>
+			<if test="amount != null">amount,</if>
+			<if test="apply_id != null">apply_id,</if>
+			<if test="apply_reason != null">apply_reason,</if>
+			<if test="apply_time != null">apply_time,</if>
+			<if test="review_id != null">review_id,</if>
+			<if test="review_time != null">review_time,</if>
+			<if test="status != null">status,</if>
+			<if test="review_remark != null">review_remark,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="change_type != null">#{change_type, jdbcType=INTEGER},</if>
+			<if test="amount != null">#{amount, jdbcType=NUMERIC},</if>
+			<if test="apply_id != null">#{apply_id, jdbcType=INTEGER},</if>
+			<if test="apply_reason != null">#{apply_reason, jdbcType=VARCHAR},</if>
+			<if test="apply_time != null">#{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_id != null">#{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="review_remark != null">#{review_remark, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_fund_change
+		set 
+		<trim suffixOverrides="," >
+			<if test="customer_id != null">customer_id=#{customer_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">flow_no=#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="change_type != null">change_type=#{change_type, jdbcType=INTEGER},</if>
+			<if test="amount != null">amount=#{amount, jdbcType=NUMERIC},</if>
+			<if test="apply_id != null">apply_id=#{apply_id, jdbcType=INTEGER},</if>
+			<if test="apply_reason != null">apply_reason=#{apply_reason, jdbcType=VARCHAR},</if>
+			<if test="apply_time != null">apply_time=#{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_id != null">review_id=#{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">review_time=#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="review_remark != null">review_remark=#{review_remark, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">operation_member_id=#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">agent_member_id=#{agent_member_id, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_fund_change
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_fund_change
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_fund_change
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="flow_no != null and flow_no != ''">and flow_no=#{flow_no, jdbcType=VARCHAR}</if>
+			<if test="apply_reason != null and apply_reason != ''">and apply_reason=#{apply_reason, jdbcType=VARCHAR}</if>
+			<if test="review_remark != null and review_remark != ''">and review_remark=#{review_remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

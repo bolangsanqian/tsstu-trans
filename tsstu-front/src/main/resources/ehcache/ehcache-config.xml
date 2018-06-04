@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    <!-- accountservice 缓存配置 -->
+    <!--EHCache分布式缓存集群环境配置-->
+    <!--rmi手动配置-->
+    <!-- <cacheManagerPeerProviderFactory 
+    	class= "net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:40001/quotation"/> -->
+
+    <cacheManagerPeerListenerFactory
+            class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+            properties="hostName=127.0.0.1,port=40002, socketTimeoutMillis=120000"/>
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            diskSpoolBufferSizeMB="30"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+    </defaultCache>
+    <cache name="system"
+           maxElementsInMemory="1000"
+           eternal="false"
+           timeToIdleSeconds="100000"
+           timeToLiveSeconds="100000"
+           overflowToDisk="false">
+        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+    </cache>
+    <cache name="quotation"
+           maxElementsInMemory="1000"
+           eternal="false"
+           timeToIdleSeconds="100000"
+           timeToLiveSeconds="100000"
+           overflowToDisk="false">
+        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+    </cache>
+</ehcache>

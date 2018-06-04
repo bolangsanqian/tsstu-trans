@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 产品分类(wp_product_category) -->
+<mapper namespace="com.tsstu.front.dao.ProductCategoryMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.front.model.ProductCategory">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="icon_url" property="icon_url" jdbcType="VARCHAR" />
+		<result column="rate_type" property="rate_type" jdbcType="INTEGER" />
+		<result column="rate" property="rate" jdbcType="NUMERIC" />
+		<result column="datasource_code" property="datasource_code" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			code,
+			name,
+			status,
+			icon_url,
+			rate_type,
+			rate,
+			datasource_code,
+			sort,
+			create_time
+		from 
+			wp_product_category
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or name like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="rate_type != null and rate_type != ''">
+				and rate_type = #{rate_type}
+			</if>
+			<if test="datasource_code != null and datasource_code != ''">
+				and datasource_code = #{datasource_code}
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and create_time &lt;= #{create_time_end}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by sort asc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			code,
+			name,
+			status,
+			icon_url,
+			rate_type,
+			rate,
+			datasource_code,
+			sort,
+			create_time
+		from  
+			wp_product_category 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</trim>
+		limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_product_category
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="code != null">code,</if>
+			<if test="name != null">name,</if>
+			<if test="status != null">status,</if>
+			<if test="icon_url != null">icon_url,</if>
+			<if test="rate_type != null">rate_type,</if>
+			<if test="rate != null">rate,</if>
+			<if test="datasource_code != null">datasource_code,</if>
+			<if test="sort != null">sort,</if>
+			<if test="create_time != null">create_time,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="code != null">#{code, jdbcType=VARCHAR},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="icon_url != null">#{icon_url, jdbcType=VARCHAR},</if>
+			<if test="rate_type != null">#{rate_type, jdbcType=INTEGER},</if>
+			<if test="rate != null">#{rate, jdbcType=NUMERIC},</if>
+			<if test="datasource_code != null">#{datasource_code, jdbcType=VARCHAR},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_product_category
+		set 
+		<trim suffixOverrides="," >
+			<if test="code != null">code=#{code, jdbcType=VARCHAR},</if>
+			<if test="name != null">name=#{name, jdbcType=VARCHAR},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="icon_url != null">icon_url=#{icon_url, jdbcType=VARCHAR},</if>
+			<if test="rate_type != null">rate_type=#{rate_type, jdbcType=INTEGER},</if>
+			<if test="rate != null">rate=#{rate, jdbcType=NUMERIC},</if>
+			<if test="datasource_code != null">datasource_code=#{datasource_code, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort=#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_product_category
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_product_category
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_product_category
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="code != null and code != ''">and code=#{code, jdbcType=VARCHAR}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

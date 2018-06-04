@@ -1,0 +1,5 @@
+INSERT INTO sys_permission (name, pid, url, permission_sign, permission_type, sort, icon, status, remark) VALUES ('${title}-查询', '{pid}', '${objectName2}/index', '${objectName2}:query', '2', '1', '', '1', '${title}-查询');
+INSERT INTO sys_permission (name, pid, url, permission_sign, permission_type, sort, icon, status, remark) VALUES ('${title}-添加', '{pid}', '${objectName2}/add', '${objectName2}:add', '2', '2', '', '1', '${title}-添加');
+INSERT INTO sys_permission (name, pid, url, permission_sign, permission_type, sort, icon, status, remark) VALUES ('${title}-修改', '{pid}', '${objectName2}/edit', '${objectName2}:edit', '2', '3', '', '1', '${title}-修改');
+INSERT INTO sys_permission (name, pid, url, permission_sign, permission_type, sort, icon, status, remark) VALUES ('${title}-删除', '{pid}', '${objectName2}/del', '${objectName2}:del', '2', '4', '', '1', '${title}-删除');
+INSERT INTO sys_permission (name, pid, url, permission_sign, permission_type, sort, icon, status, remark) VALUES ('${title}-导出', '{pid}', '${objectName2}/exportExcel', '${objectName2}:exportExcel', '2', '5', '', '1', '${title}-导出');

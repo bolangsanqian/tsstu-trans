@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 消息管理(wx_wechat_msg) -->
+<mapper namespace="com.tsstu.console.dao.WechatMsgMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.WechatMsg">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="keyword" property="keyword" jdbcType="VARCHAR" />
+		<result column="match_type" property="match_type" jdbcType="INTEGER" />
+		<result column="msg_type" property="msg_type" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			keyword,
+			match_type,
+			msg_type,
+			content,
+			status,
+			create_time,
+			remark
+		from 
+			wx_wechat_msg
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 keyword like CONCAT(CONCAT('%', #{keywords }),'%')
+					or content like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and keyword = #{keyword}
+			</if>
+			<if test="match_type != null and match_type != ''">
+				and match_type = #{match_type}
+			</if>
+			<if test="msg_type != null and msg_type != ''">
+				and msg_type = #{msg_type}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and create_time &lt;= #{create_time_end}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			keyword,
+			match_type,
+			msg_type,
+			content,
+			status,
+			create_time,
+			remark
+		from  
+			wx_wechat_msg 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wx_wechat_msg
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="keyword != null">keyword,</if>
+			<if test="match_type != null">match_type,</if>
+			<if test="msg_type != null">msg_type,</if>
+			<if test="content != null">content,</if>
+			<if test="status != null">status,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="keyword != null">#{keyword, jdbcType=VARCHAR},</if>
+			<if test="match_type != null">#{match_type, jdbcType=INTEGER},</if>
+			<if test="msg_type != null">#{msg_type, jdbcType=INTEGER},</if>
+			<if test="content != null">#{content, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wx_wechat_msg
+		set 
+		<trim suffixOverrides="," >
+			<if test="keyword != null">keyword = #{keyword, jdbcType=VARCHAR},</if>
+			<if test="match_type != null">match_type = #{match_type, jdbcType=INTEGER},</if>
+			<if test="msg_type != null">msg_type = #{msg_type, jdbcType=INTEGER},</if>
+			<if test="content != null">content = #{content, jdbcType=VARCHAR},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="remark != null">remark = #{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wx_wechat_msg
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wx_wechat_msg
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wx_wechat_msg
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="keyword != null and keyword != ''">and keyword=#{keyword, jdbcType=VARCHAR}</if>
+			<if test="content != null and content != ''">and content=#{content, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

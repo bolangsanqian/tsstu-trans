@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 任务管理(sys_task) -->
+<mapper namespace="com.tsstu.console.dao.TaskMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Task">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="auto_startup" property="auto_startup" jdbcType="INTEGER" />
+		<result column="allow_del" property="allow_del" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			code,
+			title,
+			status,
+			auto_startup,
+			allow_del,
+			sort
+		from 
+			sys_task
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 title like CONCAT(CONCAT('%', #{keywords }),'%')
+					or allow_del like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="title != null and title != ''">
+				and title = #{title}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="auto_startup != null and auto_startup != ''">
+				and auto_startup = #{auto_startup}
+			</if>
+			<if test="allow_del != null and allow_del != ''">
+				and allow_del = #{allow_del}
+			</if>
+			<if test="sort != null and sort != ''">
+				and sort = #{sort}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			code,
+			title,
+			status,
+			auto_startup,
+			allow_del,
+			sort
+		from  
+			sys_task 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="auto_startup != null and auto_startup != ''">
+				and auto_startup = #{auto_startup}
+			</if>
+			<if test="allow_del != null and allow_del != ''">
+				and allow_del = #{allow_del}
+			</if>
+		</trim>
+		limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_task
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="title != null">title,</if>
+			<if test="code != null">code,</if>
+			<if test="status != null">status,</if>
+			<if test="auto_startup != null">auto_startup,</if>
+			<if test="allow_del != null">allow_del,</if>
+			<if test="sort != null">sort,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="title != null">#{title, jdbcType=VARCHAR},</if>
+			<if test="code != null">#{code, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="auto_startup != null">#{auto_startup, jdbcType=INTEGER},</if>
+			<if test="allow_del != null">#{allow_del, jdbcType=VARCHAR},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_task
+		set 
+		<trim suffixOverrides="," >
+			<if test="code != null">code = #{code, jdbcType=VARCHAR},</if>
+			<if test="title != null">title = #{title, jdbcType=VARCHAR},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="auto_startup != null">auto_startup = #{auto_startup, jdbcType=INTEGER},</if>
+			<if test="allow_del != null">allow_del = #{allow_del, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort = #{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+		<trim prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="auto_startup != null">
+				and auto_startup = #{auto_startup}
+			</if>
+		</trim>
+	</update>
+	
+	<!-- 修改非自动启动的任务状态为停用-->
+	<update id="updateStatusByAutoStartup">
+		update
+			sys_task
+		set 
+			status = 0
+		where auto_startup = 0;
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_task
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_task
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_task
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="title != null and title != ''">and title=#{title, jdbcType=VARCHAR}</if>
+			<if test="allow_del != null and allow_del != ''">and allow_del=#{allow_del, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

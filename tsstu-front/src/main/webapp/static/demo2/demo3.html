@@ -1,0 +1,95 @@
+<html style="font-size: 110.4px;"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<title>交易历史</title>
+<link type="text/css" rel="stylesheet" href="radialindicator.css"/>
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="radialIndicator.js"></script>
+<style type="text/css">
+	#indicatorContainerWrap .warp {
+		position: absolute;
+		width: 100%;
+		font-size: 15px;
+		height: 60px;
+		line-height: 60px;
+		text-align: center;
+		color: #fdbe19;
+	}
+	
+	#indicatorContainerWrap .warp .miao {
+		font-size: 30px;
+	}
+	
+	#indicatorContainerWrap .warp .price {
+		height: 100px;
+		line-height: 10px;
+	}
+	
+	#indicatorContainerWrap {
+		position: relative;
+		display: inline-table;
+	}
+</style>
+<script>
+	$(function($) {
+		var radialObj = radialIndicator('#indicatorContainer', {
+		    radius: 60,
+		    barWidth: 5,
+		    barBgColor: '#eeeeee',
+		    minValue: 0,
+		    maxValue: 60,
+		    fontWeight: 'normal',
+		    roundCorner: true,
+		    format: function (value) {
+		        var date = new Date();
+		        return date.getHours() + ':' + date.getMinutes();
+		    }
+		});
+		 
+		setInterval(function () {
+		    radialObj.value(new Date().getSeconds() + 1);
+		}, 1000);
+		//////////////////////////////////////////////////////
+		
+		//file upload example
+		var container = $('#indicatorContainerWrap').radialIndicator({
+			barColor: '#eeeeee',
+			barBgColor: '#fdbe19',
+	        radius: 70,
+	        barWidth: 5,
+	        percentage: true,
+	        displayNumber: false,
+	        minValue: 1, //minimum value
+	        maxValue: 60, //maximum value
+	        initValue: 1,
+	    }).data('radialIndicator');
+		var i = 1;
+		var count = 60;
+		var loading = setInterval(function () {
+			if (count > 0) {
+				container.value(++i);
+				$(".miao").html(--count)
+			} else {
+				clearInterval(loading);
+			}
+		}, 1000);
+ 
+	});
+	
+</script>
+</head>
+<body>
+	<div class="prg-cont rad-prg" id="indicatorContainer"></div>
+	
+	
+	<div class="prg-cont rad-prg" id="indicatorContainerWrap">
+		<div class="warp">
+			<div class="miao">60</div>
+			<div class="price">
+				<p class="text">现价</p>
+				<p class="current-price">1000.992</p>
+			</div>
+		</div>
+	</div>     
+</body>
+</html>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 系统日志(sys_log) -->
+<mapper namespace="com.tsstu.console.dao.LogMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Log">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="operate_type" property="operate_type" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="param" property="param" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="user_name" property="user_name" jdbcType="VARCHAR" />
+		<result column="user_group" property="user_group" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			user_id,
+			name,
+			operate_type,
+			url,
+			param,
+			ip,
+			create_time
+		from 
+			sys_log
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or url like CONCAT(CONCAT('%', #{keywords }),'%')
+					or param like CONCAT(CONCAT('%', #{keywords }),'%')
+					or ip like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="user_id != null and user_id != ''">
+				and user_id = #{user_id}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name }
+			</if>
+			<if test="url != null and url != ''">
+				and url = #{url }
+			</if>
+			<if test="param != null and param != ''">
+				and param = #{param }
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip = #{ip }
+			</if>
+			<if test="operate_type != null and operate_type != ''">
+				and operate_type = #{operate_type }
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and create_time &lt;= #{create_time_end}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_log
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">user_id,</if>
+			<if test="name != null">name,</if>
+			<if test="operate_type != null">operate_type,</if>
+			<if test="url != null">url,</if>
+			<if test="param != null">param,</if>
+			<if test="ip != null">ip,</if>
+			<if test="create_time != null">create_time,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">#{user_id, jdbcType=INTEGER},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="operate_type != null">#{operate_type, jdbcType=INTEGER},</if>
+			<if test="url != null">#{url, jdbcType=VARCHAR},</if>
+			<if test="param != null">#{param, jdbcType=VARCHAR},</if>
+			<if test="ip != null">#{ip, jdbcType=VARCHAR},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_log
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_log
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			user_id,
+			name,
+			operate_type,
+			url,
+			param,
+			ip,
+			create_time
+		from  
+			sys_log 
+		where 
+			id = #{id} limit 1
+	</select>
+	
+</mapper>

@@ -1,0 +1,65 @@
+body {
+	background-color: #f2f2f2;
+}
+
+.tsstu-list {
+	background-color: #f2f2f2;
+	width: 100%;
+	padding-top: 88px;
+	padding-bottom: 100px;
+}
+
+.tsstu-list li {
+	height: 135px;
+	padding-top: 15px;
+	vertical-align: middle;
+	margin-bottom: 15px;
+	background-color: white;
+	/*border-bottom: 1px solid #171717;*/
+}
+
+.tsstu-list li div.left {
+	float: left;
+	width: 56%;
+	padding-left: 20px;
+	margin-top: 10px;
+}
+
+.tsstu-list li div.right {
+	float: right;
+	width: 38%;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.tsstu-list li p {
+	padding: 5px 0px;
+}
+
+.tsstu-list li .name {
+	font-size: 30px;
+	padding: 10px 0px;
+}
+
+.tsstu-list li .balance {
+	color: #888;
+	font-size: 25px;
+}
+
+.tsstu-list li .amount {
+	font-size: 40px;
+	padding: 10px 0px;
+}
+
+.tsstu-list li .time {
+	color: #888;
+	font-size: 25px;
+}
+
+.tsstu-list li .in {
+	color: #fa2e42 !important;
+}
+
+.tsstu-list li .out {
+	color: #1fc65b !important;
+}

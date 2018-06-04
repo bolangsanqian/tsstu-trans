@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 测试表(t_test) -->
+<mapper namespace="com.tsstu.console.dao.DemoMapper" >
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Demo" >
+		<id column="test_id" property="test_id" jdbcType="INTEGER" />
+		<result column="test_datetime" property="test_datetime" jdbcType="TIMESTAMP" />
+		<result column="test_varchar" property="test_numeric" jdbcType="VARCHAR" />
+		<result column="test_numeric" property="test_numeric" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select 
+			test_id,
+			test_datetime,
+			test_varchar,
+			test_numeric	
+		from 
+			t_test	
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			test_id,
+			test_datetime,
+			test_varchar,
+			test_numeric	
+		from 
+			t_test	
+		where
+			id = #{id}
+	</select>
+</mapper>

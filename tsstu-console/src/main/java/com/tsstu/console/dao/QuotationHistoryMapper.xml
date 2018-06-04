@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 历史行情(hq_${code}_history_m${minute}) -->
+<mapper namespace="com.tsstu.console.dao.QuotationHistoryMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.common.model.QuotationHistory">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="open" property="open" jdbcType="NUMERIC" />
+		<result column="low" property="low" jdbcType="NUMERIC" />
+		<result column="high" property="high" jdbcType="NUMERIC" />
+		<result column="close" property="close" jdbcType="NUMERIC" />
+		<result column="ctm" property="ctm" jdbcType="INTEGER" />
+		<result column="firstdt" property="firstdt" jdbcType="TIMESTAMP" />
+		<result column="lastdt" property="lastdt" jdbcType="TIMESTAMP" />
+		<result column="ct" property="ct" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			open,
+			low,
+			high,
+			close,
+			ctm,
+			firstdt,
+			lastdt,
+			ct
+		from 
+			hq_${code}_history_m${minute}
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="ctm != null and ctm != ''">
+				and ctm = #{ctm}
+			</if>
+			<if test="ct_begin != null and ct_begin != ''">
+				and ct &gt;= #{ct_begin}
+			</if>
+			<if test="ct_end != null and ct_end != ''">
+				and ct &lt;= #{ct_end}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by ctm desc
+		</if>
+	</select>
+	
+	<!-- 查询列表 -->
+	<select id="getListByCodeAndMinute" resultMap="BaseResultMap">
+		select
+			id,
+			open,
+			low,
+			high,
+			close,
+			ctm,
+			firstdt,
+			lastdt,
+			ct
+		from 
+			hq_${code}_history_m${minute}
+
+		order by ctm desc
+			
+		limit ${limit}
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			open,
+			low,
+			high,
+			close,
+			ctm,
+			firstdt,
+			lastdt,
+			ct
+		from  
+			hq_${code}_history_m${minute} 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into hq_${code}_history_m${minute}
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="open != null">open,</if>
+			<if test="low != null">low,</if>
+			<if test="high != null">high,</if>
+			<if test="close != null">close,</if>
+			<if test="ctm != null">ctm,</if>
+			<if test="firstdt != null">firstdt,</if>
+			<if test="lastdt != null">lastdt,</if>
+			<if test="ct != null">ct,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="open != null">#{open, jdbcType=NUMERIC},</if>
+			<if test="low != null">#{low, jdbcType=NUMERIC},</if>
+			<if test="high != null">#{high, jdbcType=NUMERIC},</if>
+			<if test="close != null">#{close, jdbcType=NUMERIC},</if>
+			<if test="ctm != null">#{ctm, jdbcType=INTEGER},</if>
+			<if test="firstdt != null">#{firstdt, jdbcType=TIMESTAMP},</if>
+			<if test="lastdt != null">#{lastdt, jdbcType=TIMESTAMP},</if>
+			<if test="ct != null">#{ct, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			hq_${code}_history_m${minute}
+		set 
+		<trim suffixOverrides="," >
+			<if test="open != null">open = #{open, jdbcType=NUMERIC},</if>
+			<if test="low != null">low = #{low, jdbcType=NUMERIC},</if>
+			<if test="high != null">high = #{high, jdbcType=NUMERIC},</if>
+			<if test="close != null">close = #{close, jdbcType=NUMERIC},</if>
+			<if test="ctm != null">ctm = #{ctm, jdbcType=INTEGER},</if>
+			<if test="firstdt != null">firstdt = #{firstdt, jdbcType=TIMESTAMP},</if>
+			<if test="lastdt != null">lastdt = #{lastdt, jdbcType=TIMESTAMP},</if>
+			<if test="ct != null">ct = #{ct, jdbcType=TIMESTAMP},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			hq_${code}_history_m${minute}
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			hq_${code}_history_m${minute}
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from hq_${code}_history_m${minute}
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+		</trim>
+	</select>
+	
+	<!-- 定时删除行情数据 -->
+	<delete id="deleteQuotationHistory">
+		delete from hq_${code}_history_m${minute} where ctm &lt; (select ctm from (select ctm from hq_${code}_history_m${minute} order by ctm desc limit #{keepCount}, #{keepCount}) t limit 1)
+	</delete>
+</mapper>

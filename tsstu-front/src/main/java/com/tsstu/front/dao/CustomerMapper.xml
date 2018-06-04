@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 客户管理(wp_customer) -->
+<mapper namespace="com.tsstu.front.dao.CustomerMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.front.model.Customer">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="cust_no" property="cust_no" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="NUMERIC" />
+		<result column="frozen_money" property="frozen_money" jdbcType="NUMERIC" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="wx_openid" property="wx_openid" jdbcType="VARCHAR" />
+		<result column="head_url" property="head_url" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+		<result column="is_borker" property="is_borker" jdbcType="INTEGER" />
+		<result column="broker_id" property="broker_id" jdbcType="INTEGER" />
+		<result column="h_number" property="h_number" jdbcType="VARCHAR" />
+		<result column="h_level" property="h_level" jdbcType="INTEGER" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="active_status" property="active_status" jdbcType="INTEGER" />
+		<result column="recharge_status" property="recharge_status" jdbcType="INTEGER" />
+		<result column="withdraw_status" property="withdraw_status" jdbcType="INTEGER" />
+		<result column="login_status" property="login_status" jdbcType="INTEGER" />
+		<result column="trade_status" property="trade_status" jdbcType="INTEGER" />
+		<result column="register_time" property="register_time" jdbcType="TIMESTAMP" />
+		<result column="register_ip" property="register_ip" jdbcType="VARCHAR" />
+		<result column="last_login_time" property="last_login_time" jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="last_login_ip" jdbcType="VARCHAR" />
+		<result column="org_mobile" property="org_mobile" jdbcType="VARCHAR" />
+		<result column="org_wx_openid" property="org_wx_openid" jdbcType="VARCHAR" />
+		<result column="share_code" property="share_code" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			cust_no,
+			mobile,
+			balance,
+			frozen_money,
+			nick_name,
+			wx_openid,
+			head_url,
+			email,
+			sex,
+			birthday,
+			is_borker,
+			broker_id,
+			h_number,
+			h_level,
+			operation_member_id,
+			member_id,
+			agent_member_id,
+			pid,
+			status,
+			active_status,
+			recharge_status,
+			withdraw_status,
+			login_status,
+			trade_status,
+			register_time,
+			register_ip,
+			last_login_time,
+			last_login_ip,
+			org_mobile,
+			org_wx_openid,
+			share_code
+		from 
+			wp_customer
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 cust_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or register_ip like CONCAT(CONCAT('%', #{keywords }),'%')
+					or org_mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+					or share_code like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="cust_no != null and cust_no != ''">
+				and cust_no = #{cust_no}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile}
+			</if>
+			<if test="nick_name != null and nick_name != ''">
+				and nick_name = #{nick_name}
+			</if>
+			<if test="is_borker != null and is_borker != ''">
+				and is_borker = #{is_borker}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and operation_member_id = #{operation_member_id}
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and member_id = #{member_id}
+			</if>
+			<if test="agent_member_id != null and agent_member_id != ''">
+				and agent_member_id = #{agent_member_id}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="active_status != null and active_status != ''">
+				and active_status = #{active_status}
+			</if>
+			<if test="recharge_status != null and recharge_status != ''">
+				and recharge_status = #{recharge_status}
+			</if>
+			<if test="withdraw_status != null and withdraw_status != ''">
+				and withdraw_status = #{withdraw_status}
+			</if>
+			<if test="login_status != null and login_status != ''">
+				and login_status = #{login_status}
+			</if>
+			<if test="trade_status != null and trade_status != ''">
+				and trade_status = #{trade_status}
+			</if>
+			<if test="register_time_begin != null and register_time_begin != ''">
+				and register_time &gt;= #{register_time_begin}
+			</if>
+			<if test="register_time_end != null and register_time_end != ''">
+				and register_time &lt;= #{register_time_end}
+			</if>
+			<if test="register_ip != null and register_ip != ''">
+				and register_ip = #{register_ip}
+			</if>
+			<if test="last_login_time_begin != null and last_login_time_begin != ''">
+				and last_login_time &gt;= #{last_login_time_begin}
+			</if>
+			<if test="last_login_time_end != null and last_login_time_end != ''">
+				and last_login_time &lt;= #{last_login_time_end}
+			</if>
+			<if test="org_mobile != null and org_mobile != ''">
+				and org_mobile = #{org_mobile}
+			</if>
+			<if test="share_code != null and share_code != ''">
+				and share_code = #{share_code}
+			</if>
+			<if test="h_number != null and h_number != ''">
+				and h_number like CONCAT(#{h_number }, '%') and h_level > #{h_level }
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			cust_no,
+			mobile,
+			password,
+			balance,
+			frozen_money,
+			nick_name,
+			wx_openid,
+			head_url,
+			email,
+			sex,
+			birthday,
+			is_borker,
+			broker_id,
+			h_number,
+			h_level,
+			operation_member_id,
+			member_id,
+			agent_member_id,
+			pid,
+			status,
+			active_status,
+			recharge_status,
+			withdraw_status,
+			login_status,
+			trade_status,
+			register_time,
+			register_ip,
+			last_login_time,
+			last_login_ip,
+			org_mobile,
+			org_wx_openid,
+			share_code
+		from  
+			wp_customer 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="cust_no != null and cust_no != ''">
+				and cust_no = #{cust_no}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile}
+			</if>
+			<if test="is_borker != null and is_borker != ''">
+				and is_borker = #{is_borker}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="share_code != null and share_code != ''">
+				and share_code = #{share_code}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_customer
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="cust_no != null">cust_no,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="password != null">password,</if>
+			<if test="balance != null">balance,</if>
+			<if test="frozen_money != null">frozen_money,</if>
+			<if test="nick_name != null">nick_name,</if>
+			<if test="wx_openid != null">wx_openid,</if>
+			<if test="head_url != null">head_url,</if>
+			<if test="email != null">email,</if>
+			<if test="sex != null">sex,</if>
+			<if test="birthday != null">birthday,</if>
+			<if test="is_borker != null">is_borker,</if>
+			<if test="broker_id != null">broker_id,</if>
+			<if test="h_number != null">h_number,</if>
+			<if test="h_level != null">h_level,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+			<if test="pid != null">pid,</if>
+			<if test="status != null">status,</if>
+			<if test="active_status != null">active_status,</if>
+			<if test="recharge_status != null">recharge_status,</if>
+			<if test="withdraw_status != null">withdraw_status,</if>
+			<if test="login_status != null">login_status,</if>
+			<if test="trade_status != null">trade_status,</if>
+			<if test="register_time != null">register_time,</if>
+			<if test="register_ip != null">register_ip,</if>
+			<if test="last_login_time != null">last_login_time,</if>
+			<if test="last_login_ip != null">last_login_ip,</if>
+			<if test="org_mobile != null">org_mobile,</if>
+			<if test="org_wx_openid != null">org_wx_openid,</if>
+			<if test="share_code != null">share_code,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="cust_no != null">#{cust_no, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">#{mobile, jdbcType=VARCHAR},</if>
+			<if test="password != null">#{password, jdbcType=VARCHAR},</if>
+			<if test="balance != null">#{balance, jdbcType=NUMERIC},</if>
+			<if test="frozen_money != null">#{frozen_money, jdbcType=NUMERIC},</if>
+			<if test="nick_name != null">#{nick_name, jdbcType=VARCHAR},</if>
+			<if test="wx_openid != null">#{wx_openid, jdbcType=VARCHAR},</if>
+			<if test="head_url != null">#{head_url, jdbcType=VARCHAR},</if>
+			<if test="email != null">#{email, jdbcType=VARCHAR},</if>
+			<if test="sex != null">#{sex, jdbcType=INTEGER},</if>
+			<if test="birthday != null">#{birthday, jdbcType=TIMESTAMP},</if>
+			<if test="is_borker != null">#{is_borker, jdbcType=INTEGER},</if>
+			<if test="broker_id != null">#{broker_id, jdbcType=INTEGER},</if>
+			<if test="h_number != null">#{h_number, jdbcType=VARCHAR},</if>
+			<if test="h_level != null">#{h_level, jdbcType=INTEGER},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="pid != null">#{pid, jdbcType=INTEGER},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="active_status != null">#{active_status, jdbcType=INTEGER},</if>
+			<if test="recharge_status != null">#{recharge_status, jdbcType=INTEGER},</if>
+			<if test="withdraw_status != null">#{withdraw_status, jdbcType=INTEGER},</if>
+			<if test="login_status != null">#{login_status, jdbcType=INTEGER},</if>
+			<if test="trade_status != null">#{trade_status, jdbcType=INTEGER},</if>
+			<if test="register_time != null">#{register_time, jdbcType=TIMESTAMP},</if>
+			<if test="register_ip != null">#{register_ip, jdbcType=VARCHAR},</if>
+			<if test="last_login_time != null">#{last_login_time, jdbcType=TIMESTAMP},</if>
+			<if test="last_login_ip != null">#{last_login_ip, jdbcType=VARCHAR},</if>
+			<if test="org_mobile != null">#{org_mobile, jdbcType=VARCHAR},</if>
+			<if test="org_wx_openid != null">#{org_wx_openid, jdbcType=VARCHAR},</if>
+			<if test="share_code != null">#{share_code, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+		<!-- 修改 -->
+	<update id="update">
+		update
+			wp_customer
+		set 
+		<trim suffixOverrides="," >
+			<if test="cust_no != null">cust_no=#{cust_no, jdbcType=VARCHAR},</if>
+			<if test="password != null">password=#{password, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">mobile=#{mobile, jdbcType=VARCHAR},</if>
+			<if test="nick_name != null">nick_name=#{nick_name, jdbcType=VARCHAR},</if>
+			<if test="wx_openid != null">wx_openid=#{wx_openid, jdbcType=VARCHAR},</if>
+			<if test="head_url != null">head_url=#{head_url, jdbcType=VARCHAR},</if>
+			<if test="email != null">email=#{email, jdbcType=VARCHAR},</if>
+			<if test="sex != null">sex=#{sex, jdbcType=INTEGER},</if>
+			<if test="birthday != null">birthday=#{birthday, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="active_status != null">active_status=#{active_status, jdbcType=INTEGER},</if>
+			<if test="recharge_status != null">recharge_status=#{recharge_status, jdbcType=INTEGER},</if>
+			<if test="withdraw_status != null">withdraw_status=#{withdraw_status, jdbcType=INTEGER},</if>
+			<if test="login_status != null">login_status=#{login_status, jdbcType=INTEGER},</if>
+			<if test="trade_status != null">trade_status=#{trade_status, jdbcType=INTEGER},</if>
+			<if test="last_login_time != null">last_login_time=#{last_login_time, jdbcType=TIMESTAMP},</if>
+			<if test="last_login_ip != null">last_login_ip=#{last_login_ip, jdbcType=VARCHAR},</if>
+			<if test="org_mobile != null">org_mobile=#{org_mobile, jdbcType=VARCHAR},</if>
+			<if test="org_wx_openid != null">org_wx_openid=#{org_wx_openid, jdbcType=VARCHAR},</if>
+			<if test="share_code != null">share_code=#{share_code, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 调整客户余额 -->
+	<update id="changeBalance">
+		update
+			wp_customer
+		set 
+			balance = balance + #{amount, jdbcType=NUMERIC }
+		where 
+			id = #{id} 
+			<if test="amount &lt; 0">
+				and balance &gt;= -#{amount, jdbcType=NUMERIC }
+			</if>
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_customer
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_customer
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_customer
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="cust_no != null and cust_no != ''">and cust_no=#{cust_no, jdbcType=VARCHAR}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="password != null and password != ''">and password=#{password, jdbcType=VARCHAR}</if>
+			<if test="nick_name != null and nick_name != ''">and nick_name=#{nick_name, jdbcType=VARCHAR}</if>
+			<if test="wx_openid != null and wx_openid != ''">and wx_openid=#{wx_openid, jdbcType=VARCHAR}</if>
+			<if test="head_url != null and head_url != ''">and head_url=#{head_url, jdbcType=VARCHAR}</if>
+			<if test="email != null and email != ''">and email=#{email, jdbcType=VARCHAR}</if>
+			<if test="h_number != null and h_number != ''">and h_number=#{h_number, jdbcType=VARCHAR}</if>
+			<if test="register_ip != null and register_ip != ''">and register_ip=#{register_ip, jdbcType=VARCHAR}</if>
+			<if test="last_login_ip != null and last_login_ip != ''">and last_login_ip=#{last_login_ip, jdbcType=VARCHAR}</if>
+			<if test="org_mobile != null and org_mobile != ''">and org_mobile=#{org_mobile, jdbcType=VARCHAR}</if>
+			<if test="org_wx_openid != null and org_wx_openid != ''">and org_wx_openid=#{org_wx_openid, jdbcType=VARCHAR}</if>
+			<if test="share_code != null and share_code != ''">and share_code=#{share_code, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+	
+	<!-- 获取数量-->
+	<select id="getCount" resultType="Integer">
+		select 
+			count(0)
+		from wp_customer
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="cust_no != null and cust_no != ''">and cust_no=#{cust_no, jdbcType=VARCHAR}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="password != null and password != ''">and password=#{password, jdbcType=VARCHAR}</if>
+			<if test="nick_name != null and nick_name != ''">and nick_name=#{nick_name, jdbcType=VARCHAR}</if>
+			<if test="wx_openid != null and wx_openid != ''">and wx_openid=#{wx_openid, jdbcType=VARCHAR}</if>
+			<if test="email != null and email != ''">and email=#{email, jdbcType=VARCHAR}</if>
+			<if test="h_number != null and h_number != ''">and h_number=#{h_number, jdbcType=VARCHAR}</if>
+			<if test="register_ip != null and register_ip != ''">and register_ip=#{register_ip, jdbcType=VARCHAR}</if>
+			<if test="last_login_ip != null and last_login_ip != ''">and last_login_ip=#{last_login_ip, jdbcType=VARCHAR}</if>
+			<if test="org_mobile != null and org_mobile != ''">and org_mobile=#{org_mobile, jdbcType=VARCHAR}</if>
+			<if test="org_wx_openid != null and org_wx_openid != ''">and org_wx_openid=#{org_wx_openid, jdbcType=VARCHAR}</if>
+			<if test="share_code != null and share_code != ''">and share_code=#{share_code, jdbcType=VARCHAR}</if>
+			<if test="agent_member_id != null and agent_member_id != ''">and agent_member_id=#{agent_member_id, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

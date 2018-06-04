@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 区域管理(sys_region) -->
+<mapper namespace="com.tsstu.console.dao.RegionMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Region">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="parent_code" property="parent_code" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			code,
+			name,
+			parent_code,
+			level
+		from 
+			sys_region
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 name like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="parent_code != null and parent_code != ''">
+				and parent_code = #{parent_code}
+			</if>
+			<if test="level != null and level != ''">
+				and level = #{level}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			code,
+			name,
+			parent_code,
+			level
+		from  
+			sys_region 
+		where 
+		<trim prefixOverrides="and|or">
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and id = #{id}
+			</if>
+			<if test="parent_code != null and parent_code != ''">
+				and parent_code = #{parent_code}
+			</if>
+		</trim>
+		limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_region
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="code != null">code,</if>
+			<if test="name != null">name,</if>
+			<if test="parent_code != null">parent_code,</if>
+			<if test="level != null">level,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="code != null">#{code, jdbcType=INTEGER},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="parent_code != null">#{parent_code, jdbcType=INTEGER},</if>
+			<if test="level != null">#{level, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_region
+		set 
+		<trim suffixOverrides="," >
+			<if test="code != null">code=#{code, jdbcType=INTEGER},</if>
+			<if test="name != null">name=#{name, jdbcType=VARCHAR},</if>
+			<if test="parent_code != null">parent_code=#{parent_code, jdbcType=INTEGER},</if>
+			<if test="level != null">level=#{level, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_region
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_region
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_region
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

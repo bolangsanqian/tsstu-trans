@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<%@ include file="../public/header.jsp" %>
+<style type="text/css">
+	.form_table td.right {
+		width: 100px;
+	}
+</style>
+<script type="text/javascript">
+	${r"$"}(function(${r"$"}){
+		//初始化下拉框
+		${r"$"}(".select3").uedSelect({
+			width : 221
+		});
+	});
+	
+</script>
+
+</head>
+<body>
+    <div class="formbody">
+    	<form id="form1">
+	    	<input type="hidden" id="id" name="id" value="${r"$"}{model.id }" >
+		    <table class="form_table">
+	<#list fieldList as field>
+		<#if field.is_input == 1>
+			<#if field.dict_code != "">
+				<tr>
+					<td class="right"><span class="must">*</span>${field.title}：</td>
+					<td>
+						<div class="vocation">
+						    <select id="${field.name}" name="${field.name}" class="select3">
+						    	<option value="">请选择</option>
+							    <c:forEach items="${r"$"}{${field.dict_code} }" var="item" varStatus="item_status">
+									<option value="${r"$"}{item.item_value}" <c:if test="${r"$"}{model.${field.name} eq item.item_value}">selected</c:if>>${r"$"}{item.item_name}</option>
+								</c:forEach>
+						    </select>
+					    </div>
+					 </td>
+				</tr>
+			<#elseif field.element_type == "textarea">
+				<tr>
+					<td class="right"><span class="must">*</span>${field.title}：</td>
+						<textarea rows="3" cols="" id="${field.name}" name="${field.name}" maxlength="32" placeholder="这里输入${field.title}" title="${field.title}" style="width:98%;">${r"$"}{model.${field.name} }</textarea>
+					</td>
+				</tr>
+			<#else>
+				<tr>
+					<td class="right"><span class="must">*</span>${field.title}：</td>
+					<td><input type="text" name="${field.name}" id="${field.name}" value="${r"$"}{model.${field.name} }" maxlength="32" placeholder="这里输入${field.title}" title="${field.title}" style="width:98%;"/></td>
+				</tr>
+			</#if>
+		</#if>
+	</#list>
+				<tr>
+					<td class="center" colspan="4">
+			        	<a class="button button-primary button-rounded button-small" onclick="save();">保存</a>
+			        	<a class="button button-action button-rounded button-small" onclick="parentDialog.close()">取消</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+    </div>
+<script type="text/javascript">
+	//保存
+	function save() {
+		if (!inputCheck()) {
+			return false;
+		}
+		if (${r"$"}.trim(${r"$"}("#id").val())=="") {
+			add("${r"$"}{basePath}${objectName2}/add");
+		} else {
+			edit("${r"$"}{basePath}${objectName2}/edit");
+		}
+	}
+	
+	//输入验证
+	function inputCheck() {
+<#list fieldList as field>
+	<#if field.is_input == 1>
+		if (${r"$"}.trim(${r"$"}("#${field.name}").val())=="") {
+			${r"$"}("#${field.name}").tips("<#if field.dict_code != "">请选择<#else>请输入</#if>${field.title}").focus();
+			return;
+		}
+	</#if>
+</#list>
+		return true;
+	}
+	
+</script>
+</body>
+</html>
+

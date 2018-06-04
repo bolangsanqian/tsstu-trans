@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tsstu.console.dao.GroupMapper" >
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Group">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+	</resultMap>
+
+    <!-- 查询角色分组列表 -->
+	<select id="selectGroupList" resultMap="BaseResultMap" parameterType="Integer">
+		select
+			id,
+			name,
+			sort
+		from sys_group 
+		order by sort, id
+	</select>
+	
+	<!-- 根据id查询唯一角色组 -->
+	<select id="getGroupById" resultMap="BaseResultMap" parameterType="Integer">
+		select
+			id,
+			name,
+			sort
+		from sys_group 
+		where id = #{id}
+	</select>
+	
+	<!-- 根据name查询唯一角色组 -->
+	<select id="getGroupByName" resultMap="BaseResultMap" parameterType="String">
+		select
+			id,
+			name,
+			sort
+		from sys_group 
+		where name = #{name}
+	</select>
+	
+	<!-- 根据name查询唯一角色组 -->
+	<select id="getGroupByNameAndId" resultMap="BaseResultMap">
+		select
+			id,
+			name,
+			sort
+		from sys_group 
+		where name = #{name} and id &lt;&gt; #{id}
+	</select>
+	
+	<!--新增 -->
+	<insert id="insert">
+		insert into sys_group (
+			name,
+			sort
+		) values (
+			#{name},
+			#{sort}
+		)
+	</insert>
+   
+    <!--删除-->
+	<delete id="deleteByPrimaryKey">
+		delete from 
+			sys_group
+		where id=#{id} 
+	</delete>
+	
+	<!--修改 -->
+	<update id="updateByPrimaryKeySelective">
+		update 
+			sys_group
+		set 
+			name = #{name},
+			sort = #{sort}
+		where 
+			id=#{id}
+	</update>
+</mapper>

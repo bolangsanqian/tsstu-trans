@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 数据字典项(sys_dictionary_item) -->
+<mapper namespace="com.tsstu.console.dao.DictionaryItemMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.DictionaryItem">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dict_code" property="dict_code" jdbcType="VARCHAR" />
+		<result column="item_name" property="item_name" jdbcType="VARCHAR" />
+		<result column="item_value" property="item_value" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_dictionary_item
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dict_code != null">dict_code,</if>
+			<if test="item_name != null">item_name,</if>
+			<if test="item_value != null">item_value,</if>
+			<if test="sort != null">sort,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="dict_code != null">#{dict_code, jdbcType=VARCHAR},</if>
+			<if test="item_name != null">#{item_name, jdbcType=VARCHAR},</if>
+			<if test="item_value != null">#{item_value, jdbcType=VARCHAR},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_dictionary_item
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_dictionary_item
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_dictionary_item
+		set 
+		<trim suffixOverrides="," >
+			<if test="dict_code != null">dict_code=#{dict_code, jdbcType=VARCHAR},</if>
+			<if test="item_name != null">item_name=#{item_name, jdbcType=VARCHAR},</if>
+			<if test="item_value != null">item_value=#{item_value, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort=#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+	    where
+		<trim prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id }
+			</if>
+			<if test="old_dict_code != null and old_dict_code != ''">
+				and dict_code = #{old_dict_code}
+			</if>
+		</trim>
+	</update>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			dict_code,
+			item_name,
+			item_value,
+			sort
+		from  
+			sys_dictionary_item 
+		where 
+			id = #{id} limit 1
+	</select>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			dict_code,
+			item_name,
+			item_value,
+			sort
+		from 
+			sys_dictionary_item
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					dict_code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or item_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or item_value like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="dict_code != null and dict_code != ''">
+				and dict_code = #{dict_code }
+			</if>
+			<if test="item_name != null and item_name != ''">
+				and item_name = #{item_name }
+			</if>
+			<if test="item_value != null and item_value != ''">
+				and item_value = #{item_value }
+			</if>
+		</trim>
+		order by sort 
+	</select>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_dictionary_item
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="dict_code != null">and dict_code=#{dict_code, jdbcType=VARCHAR}</if>
+			<if test="item_name != null">and item_name=#{item_name, jdbcType=VARCHAR}</if>
+			<if test="item_value != null">and item_value=#{item_value, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

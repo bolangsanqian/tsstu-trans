@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 轮播图片(sys_banner) -->
+<mapper namespace="com.tsstu.console.dao.BannerMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Banner">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="image_url" property="image_url" jdbcType="VARCHAR" />
+		<result column="jump_url" property="jump_url" jdbcType="VARCHAR" />
+		<result column="trade_mode" property="trade_mode" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			title,
+			image_url,
+			jump_url,
+			trade_mode,
+			status,
+			sort,
+			create_time
+		from 
+			sys_banner
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 title like CONCAT(CONCAT('%', #{keywords }),'%')
+					or image_url like CONCAT(CONCAT('%', #{keywords }),'%')
+					or jump_url like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="title != null and title != ''">
+				and title = #{title}
+			</if>
+			<if test="image_url != null and image_url != ''">
+				and image_url = #{image_url}
+			</if>
+			<if test="jump_url != null and jump_url != ''">
+				and jump_url = #{jump_url}
+			</if>
+			<if test="trade_mode != null and trade_mode != ''">
+				and trade_mode = #{trade_mode}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="sort != null and sort != ''">
+				and sort = #{sort}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			title,
+			image_url,
+			jump_url,
+			trade_mode,
+			status,
+			sort,
+			create_time
+		from  
+			sys_banner 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_banner
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="title != null">title,</if>
+			<if test="image_url != null">image_url,</if>
+			<if test="jump_url != null">jump_url,</if>
+			<if test="trade_mode != null">trade_mode,</if>
+			<if test="status != null">status,</if>
+			<if test="sort != null">sort,</if>
+			<if test="create_time != null">create_time,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="title != null">#{title, jdbcType=VARCHAR},</if>
+			<if test="image_url != null">#{image_url, jdbcType=VARCHAR},</if>
+			<if test="jump_url != null">#{jump_url, jdbcType=VARCHAR},</if>
+			<if test="trade_mode != null">#{trade_mode, jdbcType=INTEGER},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_banner
+		set 
+		<trim suffixOverrides="," >
+			<if test="title != null">title = #{title, jdbcType=VARCHAR},</if>
+			<if test="image_url != null">image_url = #{image_url, jdbcType=VARCHAR},</if>
+			<if test="jump_url != null">jump_url = #{jump_url, jdbcType=VARCHAR},</if>
+			<if test="trade_mode != null">trade_mode = #{trade_mode, jdbcType=INTEGER},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">sort = #{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_banner
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_banner
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_banner
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="title != null and title != ''">and title=#{title, jdbcType=VARCHAR}</if>
+			<if test="image_url != null and image_url != ''">and image_url=#{image_url, jdbcType=VARCHAR}</if>
+			<if test="jump_url != null and jump_url != ''">and jump_url=#{jump_url, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

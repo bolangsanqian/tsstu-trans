@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 会员充值订单(wp_member_recharge_order) -->
+<mapper namespace="com.tsstu.console.dao.MemberRechargeOrderMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.MemberRechargeOrder">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="flow_no" property="flow_no" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="NUMERIC" />
+		<result column="fee" property="fee" jdbcType="NUMERIC" />
+		<result column="payment_method" property="payment_method" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="recharge_time" property="recharge_time" jdbcType="TIMESTAMP" />
+		<result column="pay_sn" property="pay_sn" jdbcType="VARCHAR" />
+		<result column="callback_time" property="callback_time" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="pay_ip" property="pay_ip" jdbcType="VARCHAR" />
+		<result column="recharge_timestamp" property="recharge_timestamp" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			member_id,
+			flow_no,
+			amount,
+			fee,
+			payment_method,
+			status,
+			recharge_time,
+			pay_sn,
+			callback_time,
+			remark,
+			pay_ip,
+			recharge_timestamp
+		from 
+			wp_member_recharge_order
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 flow_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or pay_sn like CONCAT(CONCAT('%', #{keywords }),'%')
+					or remark like CONCAT(CONCAT('%', #{keywords }),'%')
+					or pay_ip like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and member_id = #{member_id}
+			</if>
+			<if test="flow_no != null and flow_no != ''">
+				and flow_no = #{flow_no}
+			</if>
+			<if test="payment_method != null and payment_method != ''">
+				and payment_method = #{payment_method}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="recharge_time_begin != null and recharge_time_begin != ''">
+				and recharge_time &gt;= #{recharge_time_begin}
+			</if>
+			<if test="recharge_time_end != null and recharge_time_end != ''">
+				and recharge_time &lt;= #{recharge_time_end}
+			</if>
+			<if test="pay_sn != null and pay_sn != ''">
+				and pay_sn = #{pay_sn}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark}
+			</if>
+			<if test="pay_ip != null and pay_ip != ''">
+				and pay_ip = #{pay_ip}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			member_id,
+			flow_no,
+			amount,
+			fee,
+			payment_method,
+			status,
+			recharge_time,
+			pay_sn,
+			callback_time,
+			remark,
+			pay_ip,
+			recharge_timestamp
+		from  
+			wp_member_recharge_order 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_member_recharge_order
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="member_id != null">member_id,</if>
+			<if test="flow_no != null">flow_no,</if>
+			<if test="amount != null">amount,</if>
+			<if test="fee != null">fee,</if>
+			<if test="payment_method != null">payment_method,</if>
+			<if test="status != null">status,</if>
+			<if test="recharge_time != null">recharge_time,</if>
+			<if test="pay_sn != null">pay_sn,</if>
+			<if test="callback_time != null">callback_time,</if>
+			<if test="remark != null">remark,</if>
+			<if test="pay_ip != null">pay_ip,</if>
+			<if test="recharge_timestamp != null">recharge_timestamp,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="amount != null">#{amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">#{fee, jdbcType=NUMERIC},</if>
+			<if test="payment_method != null">#{payment_method, jdbcType=INTEGER},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="recharge_time != null">#{recharge_time, jdbcType=TIMESTAMP},</if>
+			<if test="pay_sn != null">#{pay_sn, jdbcType=VARCHAR},</if>
+			<if test="callback_time != null">#{callback_time, jdbcType=TIMESTAMP},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+			<if test="pay_ip != null">#{pay_ip, jdbcType=VARCHAR},</if>
+			<if test="recharge_timestamp != null">#{recharge_timestamp, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_member_recharge_order
+		set 
+		<trim suffixOverrides="," >
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="flow_no != null">flow_no=#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="amount != null">amount=#{amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">fee=#{fee, jdbcType=NUMERIC},</if>
+			<if test="payment_method != null">payment_method=#{payment_method, jdbcType=INTEGER},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="recharge_time != null">recharge_time=#{recharge_time, jdbcType=TIMESTAMP},</if>
+			<if test="pay_sn != null">pay_sn=#{pay_sn, jdbcType=VARCHAR},</if>
+			<if test="callback_time != null">callback_time=#{callback_time, jdbcType=TIMESTAMP},</if>
+			<if test="remark != null">remark=#{remark, jdbcType=VARCHAR},</if>
+			<if test="pay_ip != null">pay_ip=#{pay_ip, jdbcType=VARCHAR},</if>
+			<if test="recharge_timestamp != null">recharge_timestamp=#{recharge_timestamp, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_member_recharge_order
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_member_recharge_order
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_member_recharge_order
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="flow_no != null and flow_no != ''">and flow_no=#{flow_no, jdbcType=VARCHAR}</if>
+			<if test="pay_sn != null and pay_sn != ''">and pay_sn=#{pay_sn, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+			<if test="pay_ip != null and pay_ip != ''">and pay_ip=#{pay_ip, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

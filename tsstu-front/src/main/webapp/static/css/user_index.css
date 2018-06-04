@@ -1,0 +1,206 @@
+@charset "utf-8";
+
+/***************************** 个人中心 *********************************/
+.tran_big_title{ width: 100%; height: 270px; background: #fff; border-bottom: 1px solid #dfdfdf; margin: 88px 0 30px 0;}
+.title_money{ text-align: center;}
+.tran_big_title dl{ display: inline-block; width: 210px; text-align: center; border-right: 1px solid #4285f4; margin: 50px 0;}
+.tran_big_title dl:nth-child(3){ border: none;}
+.tran_big_title dl dt{ font-size: 26px; margin-bottom: 15px;}
+.tran_big_title dl dd{ font-size: 26px;}
+.tran_big_title dl dd span{ color: #4285f4;}
+.tran_big_title ul{ text-align: center;}
+.tran_big_title ul li:first-child{ margin-right: 170px;}
+.tran_big_title ul li{ display: inline-block; width: 205px; height: 55px; line-height: 52px; text-align: center; font-size: 30px; background: #4285f4; border-radius: 30px;}
+.tran_big_title ul li a{ color: #fff;}
+.tran_big_title ul li i{ font-style: normal; color: #fff;}
+.tran_big_style{ width: 100%; height: 100%; background: #fff; border-top: 1px solid #dfdfdf; border-bottom: 1px solid #dfdfdf; margin-bottom:120px;}
+.tran_big_style li{ width: 88%; height: 90px; line-height: 90px; padding-left: 8%; margin-left: 3%; position: relative;}
+.tran_big_style li div{ top: 28px;}
+.tran_big_style li span{ position: absolute; top: 26px; right: 2%; width:25px; height: 38px; background: url("../images/global/sprites_news.png") -6px -427px no-repeat; overflow: hidden;}
+.tran_big_style li:nth-child(1) div{
+    position: absolute;
+    left: 0;
+    width: 32px;
+    height: 36px;
+    background: url("../images/global/sprites_news.png") -9px -52px no-repeat;
+    overflow: hidden;
+}
+.tran_big_style li:nth-child(2) div{
+    position: absolute;
+    top: 22px;
+    left: 0;
+    width: 38px;
+    height: 45px;
+    background: url("../images/global/sprites_news.png") -213px -49px no-repeat;
+    overflow: hidden;
+}
+.tran_big_style li:nth-child(3) div{
+    position: absolute;
+    left: 0;
+    width: 38px;
+    height: 40px;
+    background: url("../images/global/sprites_news.png") -266px -57px no-repeat;
+    overflow: hidden;
+}
+/*.tran_big_style li:nth-child(4) div{*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*width: 38px;*/
+    /*height: 44px;*/
+    /*background: url("../images/global/sprites_news.png") -57px -47px no-repeat;*/
+    /*overflow: hidden;*/
+/*}*/
+.tran_big_style li:nth-child(4) div{
+    position: absolute;
+    left: 0;
+    width: 38px;
+    height: 40px;
+    background: url("../images/global/sprites_news.png") -111px -52px no-repeat;
+    overflow: hidden;
+}
+.tran_big_style li:nth-child(5) div{
+    position: absolute;
+    left: -2px;
+    width: 42px;
+    height: 42px;
+    background: url("../images/global/sprites_news.png?20170228") -304px -56px no-repeat;
+    overflow: hidden;
+}
+.tran_big_style li:nth-child(6) div{
+    position: absolute;
+    left: 0;
+    width: 36px;
+    height: 41px;
+    background: url("../images/global/sprites_news.png") -162px -49px no-repeat;
+    overflow: hidden;
+}
+.tran_big_style a{ display: block; width: 100%; font-size: 30px; color: #000; border-bottom: 1px solid #dfdfdf;}
+.tran_big_style ul li:last-child a{ border: none;}
+.cancel_user{ display: block; width:95%; height: 90px; font-size: 32px; color: #fff; background-color: #4285f4; text-align: center; line-height: 90px; border-radius: 10px; margin: 0 auto; margin-bottom: 200px;}
+
+.appl_appl{ display: none; position: fixed; top: 50%; left: 50%; margin: -225px 0 0 -275px; width: 550px; height: 450px; background-color: #fff; border-radius: 25px; z-index: 2;}
+.appl_news strong{ display: block; width: 100%; height: 90px; font-size: 32px; color: #4285f4; line-height: 90px; font-weight: normal; text-align: center; border-bottom: 1px solid #dfdfdf;}
+.appl_news_block{ font-size: 32px; text-align: center; color: #999; line-height: 245px;}
+.appl_bottom_button{ height:100px; position:absolute; bottom:0; text-align:center;}
+.appl_bottom_button p{ border-top:2px solid #cdcdcd; border-right:2px solid #cdcdcd; width:275px; height:98px; line-height:98px; color:#555; font-size:32px; float:left;}
+.appl_bottom_button p a{ color:#4285f4;}
+.appl_bottom_button p.appl_style{ width:273px; border-right:none;}
+
+/***************************** 个人信息 *********************************/
+.user_info_style{ width: 100%; height: 100%; margin: 95px 0 200px 0;}
+.user_info_style dl{ width: 95%; height: 70px; font-size: 30px; border-bottom: 1px solid #dfdfdf; position: relative; padding: 20px 0 0 5px;margin: 0 auto;}
+.user_info_style dl:nth-child(4){ padding: 20px 0 10px 5px;}
+.user_info_style dl dt{ display: inline-block; width: 210px;}
+.user_info_style dl dd{ display: inline-block; font-size: 28px; color: #888;}
+.user_info_style dl dd strong{ display: inline-block; width: 34px; position: relative; top: 13px; overflow: hidden;}
+.user_info_style dl dd input{ border: none;}
+.user_info_style dl dd i{ font-style: normal;}
+.user_select_style img{ margin-left: -34px;}
+.user_info_style dl dd span{ display: inline-block; color: #000; margin-left: 20px;}
+.user_news_button{ width: 120px; height: 88px; text-align: center; line-height: 88px; font-size: 28px; color: #fff; position: fixed; top: 0; right: 0; z-index: 5;}
+.rzbutton{ width: 600px; height: 70px; background: #4285f4; border-radius: 10px; line-height: 70px; text-align: center; font-size: 30px; margin: 0 auto; margin-top: 100px;}
+.rzbutton a{ color: #fff;}
+
+.Ddivok2{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:1;}
+.Ddivok2-content{width:575px;height:285px;background:#fff;position:fixed;top:50%;left:50%;margin-left:-287px;margin-top:-142px;z-index:4;border-radius:30px;}
+.Ddivok2-close span{padding:10px 15px 5px;}
+.Ddivok2-close span:hover{color:#d04344;}
+.Ddivok2-content-info{height:185px;font-size:32px;text-align:center;line-height:185px;}
+.Ddivok2-content-button{height:100px;position:absolute;bottom:0;text-align:center;}
+.Ddivok2-content-button p{border-top:2px solid #cdcdcd;border-right:2px solid #cdcdcd;width:286px;height:98px;line-height:98px;font-size:28px;float:left;}
+.Ddivok2-content-button p:last-child{width:287px;border-right:none;color:#4285f4;}
+
+/***************************** 修改密码 *********************************/
+.user_pass_style{ width: 100%; height: 100%; margin: 95px 0 200px 0;}
+.user_pass_style dl{ width: 715px; height: 70px; font-size: 32px; border-bottom: 1px solid #dfdfdf; float: right; position: relative; padding: 20px 0 0 5px;}
+.user_pass_style dl:nth-child(4){ padding: 20px 0 10px 5px;}
+.user_pass_style dl dt{ display: inline-block; width: 210px;}
+.user_pass_style dl dd{ display: inline-block; font-size: 28px; color: #888;}
+.user_pass_style dl dd strong{ display: inline-block; width: 34px; position: relative; top: 13px; overflow: hidden;}
+.user_pass_style dl dd input{ border: none;}
+.user_pass_style dl dd i{ font-style: normal;}
+.user_pass_style dl dd span{ display: inline-block; color: #000; margin-left: 20px;}
+.user_pass_button{ width: 120px; height: 88px; text-align: center; line-height: 88px; position: fixed; top: 0; right: 0; color: #fff; font-size: 28px; z-index: 5;}
+
+/***************************** 银行卡列表 *********************************/
+.user_card_style{ width: 100%; overflow: hidden; margin-top: 88px; margin-bottom: 120px;}
+.bank_news{ float: left; width: 694px; height: 247px; color: #fff; background: url("../images/bank/bank_bg.png") no-repeat; margin: 20px 0 0 28px; position: relative;}
+.bank_news dl{ width: 510px; position: relative; top: 35px; left: 150px;}
+.bank_news dl dt{ font-size: 28px;}
+.bank_news dl dd{ font-size: 22px; margin-top: 15px;}
+.bank_news p{ width: 510px; font-size: 36px; position: relative; top: 85px; left: 150px;}
+.bank_news input{ display: none; width: 30px; height: 30px; position: relative; left: -50px; top: -20px;}
+.delete_bank{ width: 120px; height: 88px; text-align: center; line-height: 88px; font-size: 28px; color: #fff; position: fixed; top: 0; right: 0; z-index: 5;}
+.card_buttom_fex{ position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; background-color: #4285f4; color: #fff; font-size: 30px; line-height: 100px; text-align: center; z-index: 4;}
+.card_buttom_fex div{ position: absolute; top: 16px; left: 264px; width: 38px; height: 52px; background: url("../images/global/sprites_news.png") -111px -318px no-repeat; overflow: hidden;}
+.user_card_style .artfin_no_style{ display: block; position: absolute; top: 100px; left: 50%; width:166px; height: 166px; background: url("../images/global/lack_news.png") -166px -322px no-repeat; overflow: hidden; margin-left: -83px;}
+.newbank_button{ display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; background-color: #4285f4; color: #fff; font-size: 30px; line-height: 100px; text-align: center; z-index: 4;}
+.newbank_button ul li{ float: left; width: 50%; border-right: 1px solid #fff;}
+.newbank_button ul li:last-child{ width: 49.5%; border-right: none;}
+
+/***************************** 绑定银行卡 *********************************/
+.user_big_bg{ width: 100%; height: 100%; margin: 95px 0 200px 0;}
+.user_big_bg dl{ width: 95%; height: 70px; font-size: 30px; border-bottom: 1px solid #dfdfdf; position: relative; padding: 20px 0 0 5px; margin: 0 auto;}
+.user_big_bg dl:nth-child(4){
+    background: url("../images/global/disclosure_arrow.png") 98% center no-repeat;
+}
+.user_big_bg dl:nth-child(5){
+    background: url("../images/global/disclosure_arrow.png") 98% center no-repeat;
+}
+.user_big_bg dl dt{ display: inline-block; width: 180px;}
+.user_big_bg dl dd{ display: inline-block; font-size: 28px; color: #888;}
+.user_big_bg dl dd strong{ display: inline-block; width: 34px; position: relative; top: 13px; overflow: hidden;}
+.user_big_bg dl dd input{ width: 450px; border: none;}
+.user_big_bg dl dd i{ font-style: normal;}
+.user_big_bg img{ margin-left: -34px;}
+.user_big_bg dl dd span{ display: inline-block; color: #000; margin-left: 20px;}
+.card_news_button{ width: 120px; height: 88px; text-align: center; line-height: 88px; font-size: 28px; color: #fff; position: fixed; top: 0; right: 0; z-index: 5;}
+.card_show{ display: none; position: absolute; top: 50%; left: 50%; margin: -475px 0 0 -345px; width: 690px; height: 950px; background-color: #fff; border-radius: 30px; z-index: 2;}
+.card_show_news strong{ display: block; width: 100%; height: 90px; font-size: 32px; color: #4285f4; line-height: 90px; font-weight: normal; text-align: center; border-bottom: 1px solid #dfdfdf;}
+.card_show_news ul{ height: 825px; overflow-y: scroll;}
+.card_show_news ul li{ width: 650px; height: 90px; font-size: 30px; color: #555; border-bottom: 1px solid #dfdfdf; float: right;}
+.card_show_news ul li img{ margin: 12px 40px 0 0;}
+.card_show_news ul li span{ position: relative; top: -20px;}
+
+/* 贴士 */
+.three_tab_news{ margin-top: 20px;}
+.three_tab_news strong{ display: inline-block; width: 160px; height: 90px; text-align: center; font-weight: normal; color: #999; line-height: 90px; font-size: 32px;}
+.three_tab_news p{ color: #999; font-size: 28px; line-height: 45px; text-align: justify; padding: 0 33px; padding-bottom: 40px;}
+
+/***************************** 地址弹窗 *********************************/
+.city_show{ display: none; position: absolute; top: 50%; left: 50%; margin: -475px 0 0 -345px; width: 690px; height: 950px; background-color: #fff; border-radius: 30px; z-index: 2;}
+.city_show_news strong{ display: block; width: 100%; height: 90px; font-size: 32px; color: #4285f4; line-height: 90px; font-weight: normal; text-align: center; border-bottom: 1px solid #dfdfdf;}
+.city_show_news ul{ height: 825px; overflow-y: scroll;}
+.city_show_news ul li{ width: 650px; height: 90px; font-size: 30px; color: #555; line-height: 90px; border-bottom: 1px solid #dfdfdf; float: right; background: url("../images/global/disclosure_arrow.png") 590px center no-repeat;}
+
+/***************************** 地址列表 *********************************/
+.address_height_style{ height: 150px;}
+.user_add_style{ width: 100%; min-height: 1200px; background:url("../images/global/login_bg.gif"); position: absolute; top: 88px;}
+.address_news{ width: 100%; background-color: #fff; border-top: 1px solid #dfdfdf; border-bottom: 1px solid #dfdfdf; margin-bottom: 25px;}
+.address_news dl{ width: 100%; border-bottom: 1px solid #dfdfdf;}
+.address_news dl dt{ font-size: 32px; color: #333; padding: 25px 0 10px 30px;}
+.address_news dl dd{ font-size: 28px; color: #888; padding: 0 20px 20px 30px;}
+.address_news ul{ float: right; padding: 20px 0 20px 0;}
+.address_news ul li{ display: inline-block; font-size: 24px; color: #888; margin-right: 50px; position: relative;}
+.address_news ul li a{ font-size: 24px; color: #888;}
+.address_news ul li div{ position: absolute; top: 0px; left: -40px; width: 32px; height: 32px; background: url("../images/global/sprites_news.png") -211px -338px no-repeat; overflow: hidden}
+.address_news ul li a div{ position: absolute; top: 0px; left: -40px; width: 32px; height: 32px; background: url("../images/global/sprites_news.png") -166px -338px no-repeat; overflow: hidden;}
+.address_news ul li img{ margin-right: 10px; position: relative; top: 3px;}
+.address_buttom_fex{ position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; background-color: #4285f4; color: #fff; font-size: 30px; line-height: 100px; text-align: center;}
+.address_buttom_fex div{ position: absolute; top: 16px; left: 234px; width: 38px; height: 52px; background: url("../images/global/sprites_news.png") -111px -318px no-repeat; overflow: hidden;}
+.address_buttom_fex img{ margin-right: 20px; position: relative; top: 7px;}
+.user_add_style .artfin_no_style{ display: none; position: absolute; top: 0; left: 50%; width:166px; height: 166px; background: url("../images/global/lack_news.png") -340px -322px no-repeat; overflow: hidden; margin-left: -83px;}
+
+/***************************** 编辑地址 *********************************/
+.address_big_bg{ width: 100%; height: 100%; margin-top:90px;}
+.address_big_bg dl{ width: 715px; height: 68px; font-size: 32px; border-bottom: 1px solid #dfdfdf; float: right; position: relative; padding: 22px 0 0 5px;}
+.address_big_bg dl dt{ width: 190px; display: inline-block;}
+.address_big_bg dl dd{ display: inline-block;}
+.address_big_bg dl dd input,textarea{ border: none; width: 450px; font-size: 28px; outline: none; resize: none; font-size-adjust:none; -webkit-tap-highlight-color: rgba(0,0,0,0);}
+.address_big_bg dl:nth-child(3){
+    background: url("../images/global/disclosure_arrow.png") 678px center no-repeat;
+}
+.address_big_bg dl:last-child{ height: 220px;}
+.address_big_bg dl:last-child dd{ display: inherit; margin-top: 20px;}
+.address_big_bg dl:last-child dd textarea{ width: 670px; height: 150px; overflow: hidden;}
+.address_news_button{ width: 120px; height: 88px; text-align: center; line-height: 88px; font-size: 28px; color: #fff; position: fixed; top: 0; right: 0; z-index: 5;}

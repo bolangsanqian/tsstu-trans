@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 文章管理(sys_article) -->
+<mapper namespace="com.tsstu.console.dao.ArticleMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Article">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="article_group" property="article_group" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			title,
+			content,
+			article_group,
+			status,
+			sort,
+			create_time
+		from 
+			sys_article
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 title like CONCAT(CONCAT('%', #{keywords }),'%')
+					or content like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="title != null and title != ''">
+				and title = #{title}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content}
+			</if>
+			<if test="article_group != null and article_group != ''">
+				and article_group = #{article_group}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="sort != null and sort != ''">
+				and sort = #{sort}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			title,
+			content,
+			article_group,
+			status,
+			sort,
+			create_time
+		from  
+			sys_article 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_article
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="title != null">title,</if>
+			<if test="content != null">content,</if>
+			<if test="article_group != null">article_group,</if>
+			<if test="status != null">status,</if>
+			<if test="sort != null">sort,</if>
+			<if test="create_time != null">create_time,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="title != null">#{title, jdbcType=VARCHAR},</if>
+			<if test="content != null">#{content, jdbcType=VARCHAR},</if>
+			<if test="article_group != null">#{article_group, jdbcType=INTEGER},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_article
+		set 
+		<trim suffixOverrides="," >
+			<if test="title != null">title = #{title, jdbcType=VARCHAR},</if>
+			<if test="content != null">content = #{content, jdbcType=VARCHAR},</if>
+			<if test="article_group != null">article_group = #{article_group, jdbcType=INTEGER},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">sort = #{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			sys_article
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_article
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_article
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="title != null and title != ''">and title=#{title, jdbcType=VARCHAR}</if>
+			<if test="content != null and content != ''">and content=#{content, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 微会员表(sys_coder_attribute) -->
+<mapper namespace="com.tsstu.console.dao.CoderAttributeMapper" >
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.CoderAttribute" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="coder_id" property="coder_id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="java_type" property="java_type" jdbcType="VARCHAR" />
+		<result column="data_type" property="data_type" jdbcType="VARCHAR" />
+		<result column="data_length" property="data_length" jdbcType="INTEGER" />
+		<result column="is_key" property="is_key" jdbcType="INTEGER" />
+		<result column="element_type" property="element_type" jdbcType="VARCHAR" />
+		<result column="is_input" property="is_input" jdbcType="INTEGER" />
+		<result column="is_search" property="is_search" jdbcType="INTEGER" />
+		<result column="is_show" property="is_show" jdbcType="INTEGER" />
+		<result column="is_sort" property="is_sort" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="dict_code" property="dict_code" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+		 	ca.id,
+			ca.coder_id,
+			ca.name,
+			ca.title,
+			ca.java_type,
+			ca.data_type,
+			ca.data_length,
+			ca.is_key,
+			ca.element_type,
+			ca.is_input,
+			ca.is_search,
+			ca.is_show,
+			ca.is_sort,
+			ca.sort,
+			ca.dict_code,
+			ca.create_time
+		from 
+			sys_coder c
+		left join sys_coder_attribute ca on c.id = ca.coder_id
+		<where> 
+			<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+				and (
+					ca.name LIKE CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="coder_id != null and coder_id != ''">
+				and ca.coder_id = #{coder_id}
+			</if>
+		</where>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by ca.sort asc
+		</if>
+	</select>
+  
+  	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			coder_id,
+			name,
+			title,
+			java_type,
+			data_type,
+			data_length,
+			is_key,
+			element_type,
+			is_input,
+			is_search,
+			is_show,
+			is_sort,
+			sort,
+			dict_code,
+			create_time
+		from  
+			sys_coder_attribute 
+		where 
+			id = #{id} limit 1
+	</select>
+  
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_coder_attribute
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	    	<if test="coder_id != null" >coder_id,</if>
+			<if test="name != null" >name,</if>
+			<if test="title != null" >title,</if>
+			<if test="java_type != null" >java_type,</if>
+			<if test="data_type != null" >data_type,</if>
+			<if test="data_length != null" >data_length,</if>
+			<if test="is_key != null" >is_key,</if>
+			<if test="element_type != null" >element_type,</if>
+			<if test="is_input != null" >is_input,</if>
+			<if test="is_search != null" >is_search,</if>
+			<if test="is_show != null" >is_show,</if>
+			<if test="is_sort != null" >is_sort,</if>
+			<if test="sort != null" >sort,</if>
+			<if test="dict_code != null" >dict_code,</if>
+			<if test="create_time != null" >create_time</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	    	<if test="coder_id != null">#{coder_id, jdbcType=INTEGER},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="title != null">#{title, jdbcType=VARCHAR},</if>
+			<if test="java_type != null">#{java_type, jdbcType=VARCHAR},</if>
+			<if test="data_type != null">#{data_type, jdbcType=VARCHAR},</if>
+			<if test="data_length != null">#{data_length, jdbcType=INTEGER},</if>
+			<if test="is_key != null">#{is_key, jdbcType=INTEGER},</if>
+			<if test="element_type != null">#{element_type, jdbcType=VARCHAR},</if>
+			<if test="is_input != null">#{is_input, jdbcType=INTEGER},</if>
+			<if test="is_search != null">#{is_search, jdbcType=INTEGER},</if>
+			<if test="is_show != null">#{is_show, jdbcType=INTEGER},</if>
+			<if test="is_sort != null">#{is_sort, jdbcType=INTEGER},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="dict_code != null">#{dict_code, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_coder_attribute
+		set 
+		<trim suffixOverrides="," >
+			<if test="name != null">name=#{name, jdbcType=VARCHAR},</if>
+			<if test="title != null">title=#{title, jdbcType=VARCHAR},</if>
+			<if test="java_type != null">data_type=#{java_type, jdbcType=VARCHAR},</if>
+			<if test="data_type != null">data_type=#{data_type, jdbcType=VARCHAR},</if>
+			<if test="data_length != null">data_length=#{data_length, jdbcType=INTEGER},</if>
+			<if test="is_key != null">is_key=#{is_key, jdbcType=INTEGER},</if>
+			<if test="element_type != null">element_type=#{element_type, jdbcType=VARCHAR},</if>
+			<if test="is_input != null">is_input=#{is_input, jdbcType=INTEGER},</if>
+			<if test="is_search != null">is_search=#{is_search, jdbcType=INTEGER},</if>
+			<if test="is_show != null">is_show=#{is_show, jdbcType=INTEGER},</if>
+			<if test="is_sort != null">is_sort=#{is_sort, jdbcType=INTEGER},</if>
+			<if test="sort != null">sort=#{sort, jdbcType=INTEGER},</if>
+			<if test="dict_code != null">dict_code=#{dict_code, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete">
+		delete from 
+			sys_coder_attribute
+		where 
+		<trim prefixOverrides="and|or">
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="coder_id != null and coder_id != ''">
+				and coder_id = #{coder_id}
+			</if>
+		</trim>
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_coder_attribute
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+	
+</mapper>

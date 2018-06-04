@@ -1,0 +1,34 @@
+package com.tsstu.console.model;
+
+import java.io.Serializable;
+<#if hasDate == true>
+import java.util.Date;
+</#if>
+<#if hasBigDecimal == true>
+import java.math.BigDecimal;
+</#if>
+/**
+ * ${title}
+ * @author： ${author}
+ * @date： ${nowDate?string("yyyy-MM-dd")}
+ */
+public class ${objectName} extends Model implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
+<#list fieldList as field>
+	// ${field.title}
+	private ${field.java_type} ${field.name};
+	
+</#list>
+<#list fieldList as field>
+	public ${field.java_type} get${field.name?cap_first}() {
+		return this.${field.name};
+	}
+	
+	public void set${field.name?cap_first}(${field.java_type} ${field.name}) {
+		this.${field.name} = ${field.name};
+	}
+	
+</#list>
+}

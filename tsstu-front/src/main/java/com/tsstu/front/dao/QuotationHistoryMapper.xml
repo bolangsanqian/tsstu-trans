@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 历史行情(hq_quotation_history) -->
+<mapper namespace="com.tsstu.front.dao.QuotationHistoryMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.common.model.QuotationHistory">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="open" property="open" jdbcType="NUMERIC" />
+		<result column="low" property="low" jdbcType="NUMERIC" />
+		<result column="high" property="high" jdbcType="NUMERIC" />
+		<result column="close" property="close" jdbcType="NUMERIC" />
+		<result column="ctm" property="ctm" jdbcType="INTEGER" />
+		<result column="firstdt" property="firstdt" jdbcType="TIMESTAMP" />
+		<result column="lastdt" property="lastdt" jdbcType="TIMESTAMP" />
+		<result column="ct" property="ct" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			open,
+			low,
+			high,
+			close,
+			ctm,
+			firstdt,
+			lastdt,
+			ct
+		from 
+			hq_${code}_history_m${minute}
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="ctm != null and ctm != ''">
+				and ctm = #{ctm}
+			</if>
+			<if test="ct_begin != null and ct_begin != ''">
+				and ct &gt;= #{ct_begin}
+			</if>
+			<if test="ct_end != null and ct_end != ''">
+				and ct &lt;= #{ct_end}
+			</if>
+		</trim>
+		<if test="orderBy == null or orderBy == ''">
+			order by ctm desc
+		</if>
+		<if test="limit != null and limit != ''">
+			limit #{limit}
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			open,
+			low,
+			high,
+			close,
+			ctm,
+			firstdt,
+			lastdt,
+			ct
+		from  
+			hq_${code}_history_m${minute}
+		where 
+			id = #{id} limit 1
+	</select>
+</mapper>

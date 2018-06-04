@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 持单时间(wp_hold_time) -->
+<mapper namespace="com.tsstu.front.dao.HoldTimeMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.front.model.HoldTime">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="cycle_product_id" property="cycle_product_id" jdbcType="INTEGER" />
+		<result column="hold_time" property="hold_time" jdbcType="INTEGER" />
+		<result column="time_unit" property="time_unit" jdbcType="VARCHAR" />
+		<result column="profit" property="profit" jdbcType="INTEGER" />
+		<result column="time_list" property="time_list" jdbcType="VARCHAR" />
+		<result column="amount_list" property="amount_list" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			cycle_product_id,
+			hold_time,
+			time_unit,
+			profit,
+			time_list,
+			amount_list,
+			sort
+		from 
+			wp_hold_time
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="cycle_product_id != null and cycle_product_id != ''">
+				and cycle_product_id = #{cycle_product_id}
+			</if>
+			<if test="hold_time != null and hold_time != ''">
+				and hold_time = #{hold_time}
+			</if>
+		</trim>
+		order by sort 
+	</select>
+	
+	<!-- 查询列表 -->
+	<select id="getDictList" resultMap="BaseResultMap">
+		select
+			DISTINCT
+			hold_time,
+			time_unit
+		from 
+			wp_hold_time
+		where 
+			cycle_product_id = #{cycle_product_id }
+		order by hold_time 
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			cycle_product_id,
+			hold_time,
+			time_unit,
+			profit,
+			time_list,
+			amount_list,
+			sort
+		from  
+			wp_hold_time 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_hold_time
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="cycle_product_id != null">cycle_product_id,</if>
+			<if test="hold_time != null">hold_time,</if>
+			<if test="time_unit != null">time_unit,</if>
+			<if test="profit != null">profit,</if>
+			<if test="time_list != null">time_list,</if>
+			<if test="amount_list != null">amount_list,</if>
+			<if test="sort != null">sort,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="cycle_product_id != null">#{cycle_product_id, jdbcType=INTEGER},</if>
+			<if test="hold_time != null">#{hold_time, jdbcType=INTEGER},</if>
+			<if test="time_unit != null">#{time_unit, jdbcType=VARCHAR},</if>
+			<if test="profit != null">#{profit, jdbcType=INTEGER},</if>
+			<if test="time_list != null">#{time_list, jdbcType=VARCHAR},</if>
+			<if test="amount_list != null">#{amount_list, jdbcType=VARCHAR},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_hold_time
+		set 
+		<trim suffixOverrides="," >
+			<if test="cycle_product_id != null">cycle_product_id=#{cycle_product_id, jdbcType=INTEGER},</if>
+			<if test="hold_time != null">hold_time=#{hold_time, jdbcType=INTEGER},</if>
+			<if test="time_unit != null">time_unit=#{time_unit, jdbcType=VARCHAR},</if>
+			<if test="profit != null">profit=#{profit, jdbcType=INTEGER},</if>
+			<if test="time_list != null">time_list=#{time_list, jdbcType=VARCHAR},</if>
+			<if test="amount_list != null">amount_list=#{amount_list, jdbcType=VARCHAR},</if>
+			<if test="sort != null">sort=#{sort, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_hold_time
+		where 
+		<trim prefixOverrides="and|or">
+			<if test="cycle_product_id != null and cycle_product_id != ''">
+				and cycle_product_id = #{cycle_product_id}
+			</if>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+		</trim>
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_hold_time
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_hold_time
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="time_unit != null and time_unit != ''">and time_unit=#{time_unit, jdbcType=VARCHAR}</if>
+			<if test="time_list != null and time_list != ''">and time_list=#{time_list, jdbcType=VARCHAR}</if>
+			<if test="amount_list != null and amount_list != ''">and amount_list=#{amount_list, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

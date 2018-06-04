@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 系统参数(sys_config) -->
+<mapper namespace="com.tsstu.console.dao.ConfigMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Config">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="config_code" property="config_code" jdbcType="VARCHAR" />
+		<result column="config_name" property="config_name" jdbcType="VARCHAR" />
+		<result column="config_value" property="config_value" jdbcType="VARCHAR" />
+		<result column="config_group" property="config_group" jdbcType="INTEGER" />
+		<result column="config_unit" property="config_unit" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="effective_way" property="effective_way" jdbcType="INTEGER" />
+		<result column="json_data" property="json_data" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			config_code,
+			config_name,
+			config_value,
+			config_group,
+			config_unit,
+			status,
+			sort,
+			effective_way,
+			json_data
+		from 
+			sys_config
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 config_code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or config_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or config_value like CONCAT(CONCAT('%', #{keywords }),'%')
+					or config_unit like CONCAT(CONCAT('%', #{keywords }),'%')
+					or json_data like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="config_code != null and config_code != ''">
+				and config_code = #{config_code }
+			</if>
+			<if test="config_value != null and config_value != ''">
+				and config_value = #{config_value }
+			</if>
+			<if test="config_group != null and config_group != ''">
+				and config_group = #{config_group}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="effective_way != null and effective_way != ''">
+				and effective_way = #{effective_way}
+			</if>
+		</trim>
+		order by config_group asc,sort asc
+		
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			config_code,
+			config_name,
+			config_value,
+			config_group,
+			config_unit,
+			status,
+			sort,
+			effective_way,
+			json_data
+		from 
+			sys_config	
+		where
+			id = #{id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into sys_config
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="config_code != null">config_code,</if>
+			<if test="config_name != null">config_name,</if>
+			<if test="config_value != null">config_value,</if>
+			<if test="config_group != null">config_group,</if>
+			<if test="config_unit != null">config_unit,</if>
+			<if test="status != null">status,</if>
+			<if test="sort != null">sort,</if>
+			<if test="effective_way != null">effective_way,</if>
+			<if test="json_data != null">json_data,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="config_code != null">#{config_code, jdbcType=VARCHAR},</if>
+			<if test="config_name != null">#{config_name, jdbcType=VARCHAR},</if>
+			<if test="config_value != null">#{config_value, jdbcType=VARCHAR},</if>
+			<if test="config_group != null">#{config_group, jdbcType=INTEGER},</if>
+			<if test="config_unit != null">#{config_unit, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">#{sort, jdbcType=INTEGER},</if>
+			<if test="effective_way != null">#{effective_way, jdbcType=INTEGER},</if>
+			<if test="json_data != null">#{json_data, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			sys_config
+		set 
+		<trim suffixOverrides="," >
+			<if test="config_code != null">config_code=#{config_code, jdbcType=VARCHAR},</if>
+			<if test="config_name != null">config_name=#{config_name, jdbcType=VARCHAR},</if>
+			<if test="config_value != null">config_value=#{config_value, jdbcType=VARCHAR},</if>
+			<if test="config_group != null">config_group=#{config_group, jdbcType=INTEGER},</if>
+			<if test="config_unit != null">config_unit=#{config_unit, jdbcType=VARCHAR},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="sort != null">sort=#{sort, jdbcType=INTEGER},</if>
+			<if test="effective_way != null">effective_way=#{effective_way, jdbcType=INTEGER},</if>
+			<if test="json_data != null">json_data=#{json_data, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 根据id删除 -->
+	<delete id="delete"  parameterType="Integer">
+		delete  from
+			sys_config
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			sys_config
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from sys_config
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="config_code != null and config_code != ''">and config_code=#{config_code, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

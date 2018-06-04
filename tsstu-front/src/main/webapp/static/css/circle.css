@@ -1,0 +1,68 @@
+.tsstu-circle-wrap,
+.tsstu-circle-wrap .tsstu-circle,
+.tsstu-circle-wrap .percent {
+	position: absolute;
+	width: 280px;
+	height: 280px;
+	border-radius: 50%;
+}
+.tsstu-circle-wrap {
+	top:50%;
+	left:50%;
+	margin-top:-140px;
+	margin-left:-140px;
+	background-color: #fdbe19;
+}
+.tsstu-circle-wrap .tsstu-circle {
+	box-sizing: border-box;
+	border:10px solid #fdbe19;
+	clip:rect(0,280px,280px,140px);
+}
+.tsstu-circle-wrap .clip-auto {
+	clip:rect(auto, auto, auto, auto);
+}
+.tsstu-circle-wrap .percent {
+	box-sizing: border-box;
+	top:-10px;
+	left:-10px;
+}
+.tsstu-circle-wrap .left{
+	transition:transform ease;
+	border:10px solid #f2f2f2;
+	clip: rect(0,140px,280px,0);
+}
+.tsstu-circle-wrap .right {
+	border:10px solid #f2f2f2;
+	clip: rect(0,280px,280px,140px);
+}
+.tsstu-circle-wrap .wth0 {
+	width:0;
+}
+.tsstu-circle-wrap .num {
+	position: absolute;
+	box-sizing: border-box;
+	width: 260px;
+	height: 260px;
+	line-height: 120px;
+	text-align: center;
+	font-size: 70px;
+	left: 10px;
+	top: 10px;
+	border-radius: 50%;
+	background-color: #fff;
+	z-index: 1;
+	color: #fdbe19;
+}
+
+.tsstu-circle-wrap .price {
+	font-size: 30px;
+	line-height: 50px;
+	color: #fdbe19;
+}
+.tsstu-circle-wrap .text {
+	font-size: 26px;
+	color: rgb(94, 95, 96);
+}
+.tsstu-circle-wrap .current-price {
+	color: #fa5558;
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 签约管理(会员)(wp_member_contract_bank) -->
+<mapper namespace="com.tsstu.console.dao.MemberContractBankMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.MemberContractBank">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+		<result column="identity" property="identity" jdbcType="VARCHAR" />
+		<result column="bank_no" property="bank_no" jdbcType="VARCHAR" />
+		<result column="bankcard_no" property="bankcard_no" jdbcType="VARCHAR" />
+		<result column="province_code" property="province_code" jdbcType="INTEGER" />
+		<result column="city_code" property="city_code" jdbcType="INTEGER" />
+		<result column="bank_branch" property="bank_branch" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="last_update_time" property="last_update_time" jdbcType="TIMESTAMP" />
+		<result column="review_id" property="review_id" jdbcType="INTEGER" />
+		<result column="review_time" property="review_time" jdbcType="TIMESTAMP" />
+		<result column="review_remark" property="review_remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			member_id,
+			real_name,
+			identity,
+			bank_no,
+			bankcard_no,
+			province_code,
+			city_code,
+			bank_branch,
+			status,
+			create_time,
+			last_update_time,
+			review_id,
+			review_time,
+			review_remark
+		from 
+			wp_member_contract_bank
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 real_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or identity like CONCAT(CONCAT('%', #{keywords }),'%')
+					or bank_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or bankcard_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or bank_branch like CONCAT(CONCAT('%', #{keywords }),'%')
+					or review_remark like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and member_id = #{member_id}
+			</if>
+			<if test="real_name != null and real_name != ''">
+				and real_name = #{real_name}
+			</if>
+			<if test="identity != null and identity != ''">
+				and identity = #{identity}
+			</if>
+			<if test="bank_no != null and bank_no != ''">
+				and bank_no = #{bank_no}
+			</if>
+			<if test="bankcard_no != null and bankcard_no != ''">
+				and bankcard_no = #{bankcard_no}
+			</if>
+			<if test="province_code != null and province_code != ''">
+				and province_code = #{province_code}
+			</if>
+			<if test="city_code != null and city_code != ''">
+				and city_code = #{city_code}
+			</if>
+			<if test="bank_branch != null and bank_branch != ''">
+				and bank_branch = #{bank_branch}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and create_time &lt;= #{create_time_end}
+			</if>
+			<if test="review_remark != null and review_remark != ''">
+				and review_remark = #{review_remark}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by status asc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			member_id,
+			real_name,
+			identity,
+			bank_no,
+			bankcard_no,
+			province_code,
+			city_code,
+			bank_branch,
+			status,
+			create_time,
+			last_update_time,
+			review_id,
+			review_time,
+			review_remark
+		from  
+			wp_member_contract_bank 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_member_contract_bank
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="member_id != null">member_id,</if>
+			<if test="real_name != null">real_name,</if>
+			<if test="identity != null">identity,</if>
+			<if test="bank_no != null">bank_no,</if>
+			<if test="bankcard_no != null">bankcard_no,</if>
+			<if test="province_code != null">province_code,</if>
+			<if test="city_code != null">city_code,</if>
+			<if test="bank_branch != null">bank_branch,</if>
+			<if test="status != null">status,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="last_update_time != null">last_update_time,</if>
+			<if test="review_id != null">review_id,</if>
+			<if test="review_time != null">review_time,</if>
+			<if test="review_remark != null">review_remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="real_name != null">#{real_name, jdbcType=VARCHAR},</if>
+			<if test="identity != null">#{identity, jdbcType=VARCHAR},</if>
+			<if test="bank_no != null">#{bank_no, jdbcType=VARCHAR},</if>
+			<if test="bankcard_no != null">#{bankcard_no, jdbcType=VARCHAR},</if>
+			<if test="province_code != null">#{province_code, jdbcType=INTEGER},</if>
+			<if test="city_code != null">#{city_code, jdbcType=INTEGER},</if>
+			<if test="bank_branch != null">#{bank_branch, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+			<if test="last_update_time != null">#{last_update_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_id != null">#{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_remark != null">#{review_remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_member_contract_bank
+		set 
+		<trim suffixOverrides="," >
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="real_name != null">real_name=#{real_name, jdbcType=VARCHAR},</if>
+			<if test="identity != null">identity=#{identity, jdbcType=VARCHAR},</if>
+			<if test="bank_no != null">bank_no=#{bank_no, jdbcType=VARCHAR},</if>
+			<if test="bankcard_no != null">bankcard_no=#{bankcard_no, jdbcType=VARCHAR},</if>
+			<if test="province_code != null">province_code=#{province_code, jdbcType=INTEGER},</if>
+			<if test="city_code != null">city_code=#{city_code, jdbcType=INTEGER},</if>
+			<if test="bank_branch != null">bank_branch=#{bank_branch, jdbcType=VARCHAR},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="last_update_time != null">last_update_time=#{last_update_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_id != null">review_id=#{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">review_time=#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_remark != null">review_remark=#{review_remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_member_contract_bank
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_member_contract_bank
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_member_contract_bank
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="real_name != null and real_name != ''">and real_name=#{real_name, jdbcType=VARCHAR}</if>
+			<if test="identity != null and identity != ''">and identity=#{identity, jdbcType=VARCHAR}</if>
+			<if test="bank_no != null and bank_no != ''">and bank_no=#{bank_no, jdbcType=VARCHAR}</if>
+			<if test="bankcard_no != null and bankcard_no != ''">and bankcard_no=#{bankcard_no, jdbcType=VARCHAR}</if>
+			<if test="bank_branch != null and bank_branch != ''">and bank_branch=#{bank_branch, jdbcType=VARCHAR}</if>
+			<if test="review_remark != null and review_remark != ''">and review_remark=#{review_remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

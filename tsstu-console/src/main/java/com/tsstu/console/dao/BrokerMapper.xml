@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 经纪人(wp_broker) -->
+<mapper namespace="com.tsstu.console.dao.BrokerMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.Broker">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="invite_code" property="invite_code" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			b.id,
+			b.user_id,
+			b.customer_id,
+			b.invite_code,
+			b.status,
+			b.create_time,
+			c.mobile,
+			c.nick_name,
+			u.username
+		from 
+			wp_broker b left join wp_customer c on b.customer_id = c.id
+			left join sys_user u on b.user_id = u.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 invite_code like CONCAT(CONCAT('%', #{keywords }),'%')
+					 or c.nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="user_id != null and user_id != ''">
+				and b.user_id = #{user_id}
+			</if>
+			<if test="customer_id != null and customer_id != ''">
+				and b.customer_id = #{customer_id}
+			</if>
+			<if test="status != null and status != ''">
+				and b.status = #{status}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and c.mobile = #{mobile}
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and b.create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and b.create_time &lt;= #{create_time_end}
+			</if>
+			<if test="username != null and username != ''">
+				and u.username = #{username}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select
+			b.id,
+			b.user_id,
+			b.customer_id,
+			b.invite_code,
+			b.status,
+			b.create_time,
+			c.mobile,
+			c.nick_name,
+			u.username
+		from 
+			wp_broker b left join wp_customer c on b.customer_id = c.id
+			left join sys_user u on b.user_id = u.id
+		where 
+			b.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_broker
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">user_id,</if>
+			<if test="customer_id != null">customer_id,</if>
+			<if test="invite_code != null">invite_code,</if>
+			<if test="status != null">status,</if>
+			<if test="create_time != null">create_time,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">#{user_id, jdbcType=INTEGER},</if>
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">#{invite_code, jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_broker
+		set 
+		<trim suffixOverrides="," >
+			<if test="user_id != null">user_id = #{user_id, jdbcType=INTEGER},</if>
+			<if test="customer_id != null">customer_id = #{customer_id, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">invite_code = #{invite_code, jdbcType=VARCHAR},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_broker
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_broker
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_broker
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="invite_code != null and invite_code != ''">and invite_code=#{invite_code, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

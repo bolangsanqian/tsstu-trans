@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 提现订单(客户)(wp_withdraw_order) -->
+<mapper namespace="com.tsstu.console.dao.WithdrawOrderMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.WithdrawOrder">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="flow_no" property="flow_no" jdbcType="VARCHAR" />
+		<result column="customer_id" property="customer_id" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="NUMERIC" />
+		<result column="fee" property="fee" jdbcType="NUMERIC" />
+		<result column="apply_time" property="apply_time" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="review_sign" property="review_sign" jdbcType="INTEGER" />
+		<result column="review_id" property="review_id" jdbcType="INTEGER" />
+		<result column="review_time" property="review_time" jdbcType="TIMESTAMP" />
+		<result column="review_remark" property="review_remark" jdbcType="VARCHAR" />
+		<result column="review_status" property="review_status" jdbcType="INTEGER" />
+		<result column="auto_arrival" property="auto_arrival" jdbcType="INTEGER" />
+		<result column="withdraw_method" property="withdraw_method" jdbcType="INTEGER" />
+		<result column="third_flow_no" property="third_flow_no" jdbcType="VARCHAR" />
+		<result column="pay_id" property="pay_id" jdbcType="INTEGER" />
+		<result column="pay_time" property="pay_time" jdbcType="TIMESTAMP" />
+		<result column="pay_remark" property="pay_remark" jdbcType="VARCHAR" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="agent_member_id" property="agent_member_id" jdbcType="INTEGER" />
+		<result column="withdraw_openid" property="withdraw_openid" jdbcType="VARCHAR" />
+		<result column="wx_appid" property="wx_appid" jdbcType="VARCHAR" />
+		<result column="wxpay_mch_id" property="wxpay_mch_id" jdbcType="VARCHAR" />
+		<result column="wxpay_api_key" property="wxpay_api_key" jdbcType="VARCHAR" />
+		<result column="wxpay_cert_path" property="wxpay_cert_path" jdbcType="VARCHAR" />
+		
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+		<result column="real_name" property="real_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			w.id,
+			w.flow_no,
+			w.customer_id,
+			w.amount,
+			w.fee,
+			w.apply_time,
+			w.status,
+			w.review_sign,
+			w.review_id,
+			w.review_time,
+			w.review_remark,
+			w.review_status,
+			w.auto_arrival,
+			w.withdraw_method,
+			w.third_flow_no,
+			w.pay_id,
+			w.pay_time,
+			w.pay_remark,
+			w.operation_member_id,
+			w.member_id,
+			w.agent_member_id,
+			w.withdraw_openid,
+			w.wx_appid,
+			w.wxpay_mch_id,
+			w.wxpay_api_key,
+			w.wxpay_cert_path,
+			c.mobile,
+			c.nick_name
+		from 
+			wp_withdraw_order w left join wp_customer c on w.customer_id = c.id
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 w.flow_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or w.review_remark like CONCAT(CONCAT('%', #{keywords }),'%')
+					or w.third_flow_no like CONCAT(CONCAT('%', #{keywords }),'%')
+					or w.pay_remark like CONCAT(CONCAT('%', #{keywords }),'%')
+					or c.nick_name like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="flow_no != null and flow_no != ''">
+				and w.flow_no = #{flow_no}
+			</if>
+			<if test="customer_id != null and customer_id != ''">
+				and w.customer_id = #{customer_id}
+			</if>
+			<if test="status != null and status != ''">
+				and w.status = #{status}
+			</if>
+			<if test="review_sign != null and review_sign != ''">
+				and w.review_sign = #{review_sign}
+			</if>
+			<if test="review_id != null and review_id != ''">
+				and w.review_id = #{review_id}
+			</if>
+			<if test="review_remark != null and review_remark != ''">
+				and w.review_remark = #{review_remark}
+			</if>
+			<if test="review_status != null and review_status != ''">
+				and w.review_status = #{review_status}
+			</if>
+			<if test="auto_arrival != null and auto_arrival != ''">
+				and w.auto_arrival = #{auto_arrival}
+			</if>
+			<if test="withdraw_method != null and withdraw_method != ''">
+				and w.withdraw_method = #{withdraw_method}
+			</if>
+			<if test="third_flow_no != null and third_flow_no != ''">
+				and w.third_flow_no = #{third_flow_no}
+			</if>
+			<if test="pay_remark != null and pay_remark != ''">
+				and w.pay_remark = #{pay_remark}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and w.operation_member_id = #{operation_member_id}
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and w.member_id = #{member_id}
+			</if>
+			<if test="agent_member_id != null and agent_member_id != ''">
+				and w.agent_member_id = #{agent_member_id}
+			</if>
+			<if test="withdraw_openid != null and withdraw_openid != ''">
+				and w.withdraw_openid = #{withdraw_openid}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and c.mobile = #{mobile}
+			</if>
+			<if test="h_number != null and h_number != ''">
+				and c.h_number like CONCAT(#{h_number }, '%') and c.h_level > #{h_level }
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by #{orderBy } #{direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select
+			w.id,
+			w.flow_no,
+			w.customer_id,
+			w.amount,
+			w.fee,
+			w.apply_time,
+			w.status,
+			w.review_sign,
+			w.review_id,
+			w.review_time,
+			w.review_remark,
+			w.review_status,
+			w.auto_arrival,
+			w.withdraw_method,
+			w.third_flow_no,
+			w.pay_id,
+			w.pay_time,
+			w.pay_remark,
+			w.operation_member_id,
+			w.member_id,
+			w.agent_member_id,
+			w.withdraw_openid,
+			w.wx_appid,
+			w.wxpay_mch_id,
+			w.wxpay_api_key,
+			w.wxpay_cert_path,
+			c.mobile,
+			c.nick_name
+		from 
+			wp_withdraw_order w left join wp_customer c on w.customer_id = c.id
+		where 
+			w.id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_withdraw_order
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="flow_no != null">flow_no,</if>
+			<if test="customer_id != null">customer_id,</if>
+			<if test="amount != null">amount,</if>
+			<if test="fee != null">fee,</if>
+			<if test="apply_time != null">apply_time,</if>
+			<if test="status != null">status,</if>
+			<if test="review_sign != null">review_sign,</if>
+			<if test="review_id != null">review_id,</if>
+			<if test="review_time != null">review_time,</if>
+			<if test="review_remark != null">review_remark,</if>
+			<if test="review_status != null">review_status,</if>
+			<if test="auto_arrival != null">auto_arrival,</if>
+			<if test="withdraw_method != null">withdraw_method,</if>
+			<if test="third_flow_no != null">third_flow_no,</if>
+			<if test="pay_id != null">pay_id,</if>
+			<if test="pay_time != null">pay_time,</if>
+			<if test="pay_remark != null">pay_remark,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="agent_member_id != null">agent_member_id,</if>
+			<if test="withdraw_openid != null">withdraw_openid,</if>
+			<if test="wx_appid != null">wx_appid,</if>
+			<if test="wxpay_mch_id != null">wxpay_mch_id,</if>
+			<if test="wxpay_api_key != null">wxpay_api_key,</if>
+			<if test="wxpay_cert_path != null">wxpay_cert_path,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="flow_no != null">#{flow_no, jdbcType=VARCHAR},</if>
+			<if test="customer_id != null">#{customer_id, jdbcType=INTEGER},</if>
+			<if test="amount != null">#{amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">#{fee, jdbcType=NUMERIC},</if>
+			<if test="apply_time != null">#{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="review_sign != null">#{review_sign, jdbcType=INTEGER},</if>
+			<if test="review_id != null">#{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">#{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_remark != null">#{review_remark, jdbcType=VARCHAR},</if>
+			<if test="review_status != null">#{review_status, jdbcType=INTEGER},</if>
+			<if test="auto_arrival != null">#{auto_arrival, jdbcType=INTEGER},</if>
+			<if test="withdraw_method != null">#{withdraw_method, jdbcType=INTEGER},</if>
+			<if test="third_flow_no != null">#{third_flow_no, jdbcType=VARCHAR},</if>
+			<if test="pay_id != null">#{pay_id, jdbcType=INTEGER},</if>
+			<if test="pay_time != null">#{pay_time, jdbcType=TIMESTAMP},</if>
+			<if test="pay_remark != null">#{pay_remark, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">#{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="withdraw_openid != null">#{withdraw_openid, jdbcType=VARCHAR},</if>
+			<if test="wx_appid != null">#{wx_appid, jdbcType=VARCHAR},</if>
+			<if test="wxpay_mch_id != null">#{wxpay_mch_id, jdbcType=VARCHAR},</if>
+			<if test="wxpay_api_key != null">#{wxpay_api_key, jdbcType=VARCHAR},</if>
+			<if test="wxpay_cert_path != null">#{wxpay_cert_path, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_withdraw_order
+		set 
+		<trim suffixOverrides="," >
+			<if test="flow_no != null">flow_no = #{flow_no, jdbcType=VARCHAR},</if>
+			<if test="customer_id != null">customer_id = #{customer_id, jdbcType=INTEGER},</if>
+			<if test="amount != null">amount = #{amount, jdbcType=NUMERIC},</if>
+			<if test="fee != null">fee = #{fee, jdbcType=NUMERIC},</if>
+			<if test="apply_time != null">apply_time = #{apply_time, jdbcType=TIMESTAMP},</if>
+			<if test="status != null">status = #{status, jdbcType=INTEGER},</if>
+			<if test="review_sign != null">review_sign = #{review_sign, jdbcType=INTEGER},</if>
+			<if test="review_id != null">review_id = #{review_id, jdbcType=INTEGER},</if>
+			<if test="review_time != null">review_time = #{review_time, jdbcType=TIMESTAMP},</if>
+			<if test="review_remark != null">review_remark = #{review_remark, jdbcType=VARCHAR},</if>
+			<if test="review_status != null">review_status = #{review_status, jdbcType=INTEGER},</if>
+			<if test="auto_arrival != null">auto_arrival = #{auto_arrival, jdbcType=INTEGER},</if>
+			<if test="withdraw_method != null">withdraw_method = #{withdraw_method, jdbcType=INTEGER},</if>
+			<if test="third_flow_no != null">third_flow_no = #{third_flow_no, jdbcType=VARCHAR},</if>
+			<if test="pay_id != null">pay_id = #{pay_id, jdbcType=INTEGER},</if>
+			<if test="pay_time != null">pay_time = #{pay_time, jdbcType=TIMESTAMP},</if>
+			<if test="pay_remark != null">pay_remark = #{pay_remark, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">operation_member_id = #{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">member_id = #{member_id, jdbcType=INTEGER},</if>
+			<if test="agent_member_id != null">agent_member_id = #{agent_member_id, jdbcType=INTEGER},</if>
+			<if test="withdraw_openid != null">withdraw_openid = #{withdraw_openid, jdbcType=VARCHAR},</if>
+			<if test="wx_appid != null">wx_appid = #{wx_appid, jdbcType=VARCHAR},</if>
+			<if test="wxpay_mch_id != null">wxpay_mch_id = #{wxpay_mch_id, jdbcType=VARCHAR},</if>
+			<if test="wxpay_api_key != null">wxpay_api_key = #{wxpay_api_key, jdbcType=VARCHAR},</if>
+			<if test="wxpay_cert_path != null">wxpay_cert_path = #{wxpay_cert_path, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_withdraw_order
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_withdraw_order
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_withdraw_order
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="flow_no != null and flow_no != ''">and flow_no=#{flow_no, jdbcType=VARCHAR}</if>
+			<if test="review_remark != null and review_remark != ''">and review_remark=#{review_remark, jdbcType=VARCHAR}</if>
+			<if test="third_flow_no != null and third_flow_no != ''">and third_flow_no=#{third_flow_no, jdbcType=VARCHAR}</if>
+			<if test="pay_remark != null and pay_remark != ''">and pay_remark=#{pay_remark, jdbcType=VARCHAR}</if>
+			<if test="withdraw_openid != null and withdraw_openid != ''">and withdraw_openid=#{withdraw_openid, jdbcType=VARCHAR}</if>
+			<if test="wx_appid != null and wx_appid != ''">and wx_appid=#{wx_appid, jdbcType=VARCHAR}</if>
+			<if test="wxpay_mch_id != null and wxpay_mch_id != ''">and wxpay_mch_id=#{wxpay_mch_id, jdbcType=VARCHAR}</if>
+			<if test="wxpay_api_key != null and wxpay_api_key != ''">and wxpay_api_key=#{wxpay_api_key, jdbcType=VARCHAR}</if>
+			<if test="wxpay_cert_path != null and wxpay_cert_path != ''">and wxpay_cert_path=#{wxpay_cert_path, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>

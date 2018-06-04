@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 代理会员(wp_agent_member) -->
+<mapper namespace="com.tsstu.console.dao.AgentMemberMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tsstu.console.model.AgentMember">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="member_id" property="member_id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="company_name" property="company_name" jdbcType="VARCHAR" />
+		<result column="company_leader" property="company_leader" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="identity_type" property="identity_type" jdbcType="INTEGER" />
+		<result column="identity" property="identity" jdbcType="VARCHAR" />
+		<result column="psition_percent" property="psition_percent" jdbcType="NUMERIC" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="invite_code" property="invite_code" jdbcType="VARCHAR" />
+		<result column="wx_qrcode_url" property="wx_qrcode_url" jdbcType="VARCHAR" />
+		<result column="operation_member_id" property="operation_member_id" jdbcType="INTEGER" />
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="getList" resultMap="BaseResultMap">
+		select
+			id,
+			user_id,
+			member_id,
+			name,
+			company_name,
+			company_leader,
+			mobile,
+			identity_type,
+			identity,
+			psition_percent,
+			status,
+			invite_code,
+			wx_qrcode_url,
+			operation_member_id,
+			create_time,
+			remark
+		from 
+			wp_agent_member
+		<trim prefix="where" prefixOverrides="and|or">
+			<!-- 关键词检索 -->
+			<if test="keywords!= null and keywords != ''">
+				and (
+					 name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or company_name like CONCAT(CONCAT('%', #{keywords }),'%')
+					or company_leader like CONCAT(CONCAT('%', #{keywords }),'%')
+					or mobile like CONCAT(CONCAT('%', #{keywords }),'%')
+					or identity like CONCAT(CONCAT('%', #{keywords }),'%')
+					or invite_code like CONCAT(CONCAT('%', #{keywords }),'%')
+					or remark like CONCAT(CONCAT('%', #{keywords }),'%')
+				)
+			</if>
+			<if test="member_id != null and member_id != ''">
+				and member_id = #{member_id}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="company_name != null and company_name != ''">
+				and company_name = #{company_name}
+			</if>
+			<if test="company_leader != null and company_leader != ''">
+				and company_leader = #{company_leader}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile}
+			</if>
+			<if test="identity != null and identity != ''">
+				and identity = #{identity}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="invite_code != null and invite_code != ''">
+				and invite_code = #{invite_code}
+			</if>
+			<if test="operation_member_id != null and operation_member_id != ''">
+				and operation_member_id = #{operation_member_id}
+			</if>
+			<if test="create_time_begin != null and create_time_begin != ''">
+				and create_time &gt;= #{create_time_begin}
+			</if>
+			<if test="create_time_end != null and create_time_end != ''">
+				and create_time &lt;= #{create_time_end}
+			</if>
+		</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy } ${sort_direction }
+		</if>
+		<if test="orderBy == null or orderBy == ''">
+			order by id desc
+		</if>
+	</select>
+	
+	<!-- 根据id唯一查询 -->
+	<select id="getOne" resultMap="BaseResultMap">
+		select 
+			id,
+			user_id,
+			member_id,
+			name,
+			company_name,
+			company_leader,
+			mobile,
+			identity_type,
+			identity,
+			psition_percent,
+			status,
+			invite_code,
+			wx_qrcode_url,
+			operation_member_id,
+			create_time,
+			remark
+		from  
+			wp_agent_member 
+		where 
+			id = #{id} limit 1
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+	    insert into wp_agent_member
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">user_id,</if>
+			<if test="member_id != null">member_id,</if>
+			<if test="name != null">name,</if>
+			<if test="company_name != null">company_name,</if>
+			<if test="company_leader != null">company_leader,</if>
+			<if test="mobile != null">mobile,</if>
+			<if test="identity_type != null">identity_type,</if>
+			<if test="identity != null">identity,</if>
+			<if test="psition_percent != null">psition_percent,</if>
+			<if test="status != null">status,</if>
+			<if test="invite_code != null">invite_code,</if>
+			<if test="wx_qrcode_url != null">wx_qrcode_url,</if>
+			<if test="operation_member_id != null">operation_member_id,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="remark != null">remark,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="user_id != null">#{user_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">#{member_id, jdbcType=INTEGER},</if>
+			<if test="name != null">#{name, jdbcType=VARCHAR},</if>
+			<if test="company_name != null">#{company_name, jdbcType=VARCHAR},</if>
+			<if test="company_leader != null">#{company_leader, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">#{mobile, jdbcType=VARCHAR},</if>
+			<if test="identity_type != null">#{identity_type, jdbcType=INTEGER},</if>
+			<if test="identity != null">#{identity, jdbcType=VARCHAR},</if>
+			<if test="psition_percent != null">#{psition_percent, jdbcType=NUMERIC},</if>
+			<if test="status != null">#{status, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">#{invite_code, jdbcType=VARCHAR},</if>
+			<if test="wx_qrcode_url != null">#{wx_qrcode_url, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="create_time != null">#{create_time, jdbcType=TIMESTAMP},</if>
+			<if test="remark != null">#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update">
+		update
+			wp_agent_member
+		set 
+		<trim suffixOverrides="," >
+			<if test="user_id != null">user_id=#{user_id, jdbcType=INTEGER},</if>
+			<if test="member_id != null">member_id=#{member_id, jdbcType=INTEGER},</if>
+			<if test="name != null">name=#{name, jdbcType=VARCHAR},</if>
+			<if test="company_name != null">company_name=#{company_name, jdbcType=VARCHAR},</if>
+			<if test="company_leader != null">company_leader=#{company_leader, jdbcType=VARCHAR},</if>
+			<if test="mobile != null">mobile=#{mobile, jdbcType=VARCHAR},</if>
+			<if test="identity_type != null">identity_type=#{identity_type, jdbcType=INTEGER},</if>
+			<if test="identity != null">identity=#{identity, jdbcType=VARCHAR},</if>
+			<if test="psition_percent != null">psition_percent=#{psition_percent, jdbcType=NUMERIC},</if>
+			<if test="status != null">status=#{status, jdbcType=INTEGER},</if>
+			<if test="invite_code != null">invite_code=#{invite_code, jdbcType=VARCHAR},</if>
+			<if test="wx_qrcode_url != null">wx_qrcode_url=#{wx_qrcode_url, jdbcType=VARCHAR},</if>
+			<if test="operation_member_id != null">operation_member_id=#{operation_member_id, jdbcType=INTEGER},</if>
+			<if test="remark != null">remark=#{remark, jdbcType=VARCHAR},</if>
+	    </trim>
+		where 
+			id = #{id}
+	</update>
+	
+	<!--删除-->
+	<delete id="delete" parameterType="Integer">
+		delete from 
+			wp_agent_member
+		where id=#{id} 
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete  from
+			wp_agent_member
+		where 
+			id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id} 
+        </foreach>
+	</delete>
+	
+	<!-- 判断是否重复 -->
+	<select id="isExist" resultType="Boolean">
+		select 
+			(case when count(0)>0 then 1 else 0 end) 
+		from wp_agent_member
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+			<if test="company_name != null and company_name != ''">and company_name=#{company_name, jdbcType=VARCHAR}</if>
+			<if test="company_leader != null and company_leader != ''">and company_leader=#{company_leader, jdbcType=VARCHAR}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="identity != null and identity != ''">and identity=#{identity, jdbcType=VARCHAR}</if>
+			<if test="invite_code != null and invite_code != ''">and invite_code=#{invite_code, jdbcType=VARCHAR}</if>
+			<if test="wx_qrcode_url != null and wx_qrcode_url != ''">and wx_qrcode_url=#{wx_qrcode_url, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+	
+	<!-- 获取数量 -->
+	<select id="getCount" resultType="Integer">
+		select 
+			count(0) 
+		from wp_agent_member
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id != null">and id&lt;&gt;#{id, jdbcType=INTEGER}</if>
+			<if test="name != null and name != ''">and name=#{name, jdbcType=VARCHAR}</if>
+			<if test="member_id != null and member_id != ''">and member_id=#{member_id, jdbcType=INTEGER}</if>
+			<if test="company_name != null and company_name != ''">and company_name=#{company_name, jdbcType=VARCHAR}</if>
+			<if test="company_leader != null and company_leader != ''">and company_leader=#{company_leader, jdbcType=VARCHAR}</if>
+			<if test="mobile != null and mobile != ''">and mobile=#{mobile, jdbcType=VARCHAR}</if>
+			<if test="identity != null and identity != ''">and identity=#{identity, jdbcType=VARCHAR}</if>
+			<if test="invite_code != null and invite_code != ''">and invite_code=#{invite_code, jdbcType=VARCHAR}</if>
+			<if test="wx_qrcode_url != null and wx_qrcode_url != ''">and wx_qrcode_url=#{wx_qrcode_url, jdbcType=VARCHAR}</if>
+			<if test="remark != null and remark != ''">and remark=#{remark, jdbcType=VARCHAR}</if>
+		</trim>
+	</select>
+</mapper>
